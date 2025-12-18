@@ -19,8 +19,6 @@ func ParseUserAgent(uaString string) *UserAgentInfo {
 	device := "Desktop"
 	if ua.Mobile() {
 		device = "Mobile"
-	} else if ua.Tablet() {
-		device = "Tablet"
 	} else if ua.Bot() {
 		device = "Bot"
 	}

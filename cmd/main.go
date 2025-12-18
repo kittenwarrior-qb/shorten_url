@@ -1,16 +1,24 @@
 package main
 
 import (
+	"context"
 	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
 	_ "quocbui.dev/m/docs"
 	"quocbui.dev/m/internal/config"
+	"quocbui.dev/m/internal/handlers"
 	"quocbui.dev/m/internal/repository/postgres"
+	"quocbui.dev/m/internal/router"
+	"quocbui.dev/m/internal/service"
 )
 
 // @title           URL Shortener API
@@ -57,21 +65,54 @@ func main() {
 	}
 	defer sqlDB.Close()
 
-	r := gin.Default()
+	// Initialize repositories
+	userRepo := postgres.NewUserRepository(db)
+	linkRepo := postgres.NewLinkRepository(db)
+	clickRepo := postgres.NewClickRepository(db)
+
+	// Initialize services
+	geoIPService := service.NewGeoIPService()
+	authService := service.NewAuthService(userRepo)
+	linkService := service.NewLinkService(linkRepo, clickRepo, geoIPService)
+	analyticsService := service.NewAnalyticsService(clickRepo, linkRepo)
+
+	// Initialize handlers
+	authHandler := handlers.NewAuthHandler(authService, cfg.JWT.Secret, cfg.JWT.ExpiryHours)
+	userHandler := handlers.NewUserHandler(userRepo)
+	linkHandler := handlers.NewLinkHandler(linkService, analyticsService, cfg.App.Domain, cfg.ShortCode.Length)
+
+	// Setup router
+	r := router.SetupRouter(cfg, authHandler, userHandler, linkHandler)
 
 	// Swagger documentation
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// Health check endpoint
-	r.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"status":  "ok",
-			"message": "URL Shortener Service is running",
-		})
-	})
-
-	log.Printf("Server starting on %s:%s...", cfg.App.Host, cfg.App.Port)
-	if err := r.Run(cfg.App.Host + ":" + cfg.App.Port); err != nil {
-		log.Fatal("Failed to start server:", err)
+	// Create server
+	srv := &http.Server{
+		Addr:    cfg.App.Host + ":" + cfg.App.Port,
+		Handler: r,
 	}
+
+	// Graceful shutdown
+	go func() {
+		log.Printf("Server starting on %s:%s...", cfg.App.Host, cfg.App.Port)
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Failed to start server: %v", err)
+		}
+	}()
+
+	// Wait for interrupt signal
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	log.Println("Shutting down server...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatal("Server forced to shutdown:", err)
+	}
+
+	log.Println("Server exited gracefully")
 }
