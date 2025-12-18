@@ -33,11 +33,13 @@ definitions:
   dto.CreateLinkRequest:
     properties:
       alias:
+        example: my-link
         type: string
       expires_in:
-        description: hours
+        example: 24
         type: integer
       url:
+        example: https://github.com
         type: string
     required:
     - url

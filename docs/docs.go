@@ -483,14 +483,16 @@ const docTemplate = `{
             ],
             "properties": {
                 "alias": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "my-link"
                 },
                 "expires_in": {
-                    "description": "hours",
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 24
                 },
                 "url": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "https://github.com"
                 }
             }
         },

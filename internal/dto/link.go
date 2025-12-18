@@ -4,9 +4,9 @@ import "time"
 
 // CreateLinkRequest represents a request to create a shortened link
 type CreateLinkRequest struct {
-	URL       string  `json:"url" binding:"required,url"`
-	Alias     *string `json:"alias,omitempty"`
-	ExpiresIn *int    `json:"expires_in,omitempty"` // hours
+	URL       string  `json:"url" binding:"required,url" example:"https://github.com"`
+	Alias     *string `json:"alias,omitempty" example:"my-link"`
+	ExpiresIn *int    `json:"expires_in,omitempty" example:"24"`
 }
 
 // LinkResponse represents a link in API responses
