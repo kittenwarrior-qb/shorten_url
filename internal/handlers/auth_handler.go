@@ -24,7 +24,17 @@ func NewAuthHandler(authService *service.AuthService, jwtSecret string, jwtExpir
 	}
 }
 
-// Register handles user registration
+// Register godoc
+// @Summary      Register new user
+// @Description  Create a new user account
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        request body dto.RegisterRequest true "Register request"
+// @Success      201 {object} dto.UserResponse
+// @Failure      400 {object} dto.ErrorResponse
+// @Failure      409 {object} dto.ErrorResponse
+// @Router       /auth/register [post]
 func (h *AuthHandler) Register(c *gin.Context) {
 	var req dto.RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -50,7 +60,17 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	})
 }
 
-// Login handles user authentication
+// Login godoc
+// @Summary      Login user
+// @Description  Authenticate user and return JWT token
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        request body dto.LoginRequest true "Login request"
+// @Success      200 {object} dto.LoginResponse
+// @Failure      400 {object} dto.ErrorResponse
+// @Failure      401 {object} dto.ErrorResponse
+// @Router       /auth/login [post]
 func (h *AuthHandler) Login(c *gin.Context) {
 	var req dto.LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

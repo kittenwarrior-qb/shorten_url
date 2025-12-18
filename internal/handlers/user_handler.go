@@ -19,7 +19,16 @@ func NewUserHandler(userRepo repository.UserRepository) *UserHandler {
 	}
 }
 
-// GetMe returns the current user's information
+// GetMe godoc
+// @Summary      Get current user
+// @Description  Get authenticated user information
+// @Tags         user
+// @Produce      json
+// @Security     BearerAuth
+// @Success      200 {object} dto.UserResponse
+// @Failure      401 {object} dto.ErrorResponse
+// @Failure      404 {object} dto.ErrorResponse
+// @Router       /me [get]
 func (h *UserHandler) GetMe(c *gin.Context) {
 	userID, ok := middleware.GetUserID(c)
 	if !ok {

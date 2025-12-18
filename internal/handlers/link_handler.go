@@ -29,7 +29,17 @@ func NewLinkHandler(linkService *service.LinkService, analyticsService *service.
 	}
 }
 
-// ShortenPublic creates an anonymous shortened link
+// ShortenPublic godoc
+// @Summary      Shorten URL (public)
+// @Description  Create anonymous shortened link
+// @Tags         links
+// @Accept       json
+// @Produce      json
+// @Param        request body dto.CreateLinkRequest true "Create link request"
+// @Success      201 {object} dto.LinkResponse
+// @Failure      400 {object} dto.ErrorResponse
+// @Failure      409 {object} dto.ErrorResponse
+// @Router       /shorten [post]
 func (h *LinkHandler) ShortenPublic(c *gin.Context) {
 	var req dto.CreateLinkRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -52,7 +62,19 @@ func (h *LinkHandler) ShortenPublic(c *gin.Context) {
 	c.JSON(http.StatusCreated, h.toLinkResponse(link))
 }
 
-// ShortenPrivate creates a link associated with the authenticated user
+// ShortenPrivate godoc
+// @Summary      Shorten URL (private)
+// @Description  Create shortened link for authenticated user
+// @Tags         links
+// @Accept       json
+// @Produce      json
+// @Security     BearerAuth
+// @Param        request body dto.CreateLinkRequest true "Create link request"
+// @Success      201 {object} dto.LinkResponse
+// @Failure      400 {object} dto.ErrorResponse
+// @Failure      401 {object} dto.ErrorResponse
+// @Failure      409 {object} dto.ErrorResponse
+// @Router       /me/shorten [post]
 func (h *LinkHandler) ShortenPrivate(c *gin.Context) {
 	userID, ok := middleware.GetUserID(c)
 	if !ok {
@@ -81,7 +103,15 @@ func (h *LinkHandler) ShortenPrivate(c *gin.Context) {
 	c.JSON(http.StatusCreated, h.toLinkResponse(link))
 }
 
-// Redirect handles the short URL redirect and tracks clicks
+// Redirect godoc
+// @Summary      Redirect to original URL
+// @Description  Redirect short URL to original URL and track click
+// @Tags         redirect
+// @Param        code path string true "Short code"
+// @Success      301 "Redirect to original URL"
+// @Failure      404 {object} dto.ErrorResponse
+// @Failure      410 {object} dto.ErrorResponse
+// @Router       /{code} [get]
 func (h *LinkHandler) Redirect(c *gin.Context) {
 	code := c.Param("code")
 
@@ -108,7 +138,17 @@ func (h *LinkHandler) Redirect(c *gin.Context) {
 	c.Redirect(http.StatusMovedPermanently, originalURL)
 }
 
-// GetMyLinks returns all links for the authenticated user
+// GetMyLinks godoc
+// @Summary      Get my links
+// @Description  Get all links for authenticated user with pagination
+// @Tags         links
+// @Produce      json
+// @Security     BearerAuth
+// @Param        page query int false "Page number" default(1)
+// @Param        per_page query int false "Items per page" default(10)
+// @Success      200 {object} dto.ListLinksResponse
+// @Failure      401 {object} dto.ErrorResponse
+// @Router       /me/links [get]
 func (h *LinkHandler) GetMyLinks(c *gin.Context) {
 	userID, ok := middleware.GetUserID(c)
 	if !ok {
@@ -145,7 +185,18 @@ func (h *LinkHandler) GetMyLinks(c *gin.Context) {
 	})
 }
 
-// GetMyLinkDetail returns a specific link with analytics
+// GetMyLinkDetail godoc
+// @Summary      Get link detail
+// @Description  Get link detail with analytics for authenticated user
+// @Tags         links
+// @Produce      json
+// @Security     BearerAuth
+// @Param        code path string true "Short code"
+// @Success      200 {object} dto.LinkDetailResponse
+// @Failure      401 {object} dto.ErrorResponse
+// @Failure      403 {object} dto.ErrorResponse
+// @Failure      404 {object} dto.ErrorResponse
+// @Router       /me/links/{code} [get]
 func (h *LinkHandler) GetMyLinkDetail(c *gin.Context) {
 	userID, ok := middleware.GetUserID(c)
 	if !ok {
@@ -177,7 +228,18 @@ func (h *LinkHandler) GetMyLinkDetail(c *gin.Context) {
 	})
 }
 
-// DeleteMyLink deletes a link owned by the authenticated user
+// DeleteMyLink godoc
+// @Summary      Delete link
+// @Description  Delete a link owned by authenticated user
+// @Tags         links
+// @Produce      json
+// @Security     BearerAuth
+// @Param        code path string true "Short code"
+// @Success      200 {object} dto.MessageResponse
+// @Failure      401 {object} dto.ErrorResponse
+// @Failure      403 {object} dto.ErrorResponse
+// @Failure      404 {object} dto.ErrorResponse
+// @Router       /me/links/{code} [delete]
 func (h *LinkHandler) DeleteMyLink(c *gin.Context) {
 	userID, ok := middleware.GetUserID(c)
 	if !ok {
