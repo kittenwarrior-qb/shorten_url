@@ -9,15 +9,7 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "email": "support@quocbui.dev"
-        },
-        "license": {
-            "name": "MIT",
-            "url": "http://opensource.org/licenses/MIT"
-        },
+        "contact": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -575,10 +567,12 @@ const docTemplate = `{
             ],
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "user@gmail.com"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "123"
                 }
             }
         },
@@ -613,15 +607,16 @@ const docTemplate = `{
             ],
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "user@gmail.com"
                 },
                 "name": {
                     "type": "string",
-                    "minLength": 2
+                    "example": "user"
                 },
                 "password": {
                     "type": "string",
-                    "minLength": 6
+                    "example": "123"
                 }
             }
         },
@@ -645,7 +640,6 @@ const docTemplate = `{
     },
     "securityDefinitions": {
         "BearerAuth": {
-            "description": "Type \"Bearer\" followed by a space and JWT token.",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
@@ -660,7 +654,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "URL Shortener API",
-	Description:      "API service for URL shortening with analytics",
+	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

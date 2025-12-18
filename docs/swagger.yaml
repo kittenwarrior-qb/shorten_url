@@ -87,8 +87,10 @@ definitions:
   dto.LoginRequest:
     properties:
       email:
+        example: user@gmail.com
         type: string
       password:
+        example: "123"
         type: string
     required:
     - email
@@ -111,12 +113,13 @@ definitions:
   dto.RegisterRequest:
     properties:
       email:
+        example: user@gmail.com
         type: string
       name:
-        minLength: 2
+        example: user
         type: string
       password:
-        minLength: 6
+        example: "123"
         type: string
     required:
     - email
@@ -136,14 +139,7 @@ definitions:
     type: object
 host: localhost:8080
 info:
-  contact:
-    email: support@quocbui.dev
-    name: API Support
-  description: API service for URL shortening with analytics
-  license:
-    name: MIT
-    url: http://opensource.org/licenses/MIT
-  termsOfService: http://swagger.io/terms/
+  contact: {}
   title: URL Shortener API
   version: "1.0"
 paths:
@@ -416,7 +412,6 @@ paths:
       - links
 securityDefinitions:
   BearerAuth:
-    description: Type "Bearer" followed by a space and JWT token.
     in: header
     name: Authorization
     type: apiKey

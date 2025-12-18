@@ -18,15 +18,11 @@ func AuthMiddleware(secret string) gin.HandlerFunc {
 			return
 		}
 
-		// Extract token from "Bearer <token>"
-		parts := strings.Split(authHeader, " ")
-		if len(parts) != 2 || parts[0] != "Bearer" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid authorization header format"})
-			c.Abort()
-			return
+		// Extract token - support both "Bearer <token>" and raw token
+		tokenString := authHeader
+		if strings.HasPrefix(authHeader, "Bearer ") {
+			tokenString = strings.TrimPrefix(authHeader, "Bearer ")
 		}
-
-		tokenString := parts[1]
 		claims, err := utils.ValidateToken(tokenString, secret)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid or expired token"})

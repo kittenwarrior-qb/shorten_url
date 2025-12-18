@@ -21,24 +21,13 @@ import (
 	"quocbui.dev/m/internal/service"
 )
 
-// @title           URL Shortener API
-// @version         1.0
-// @description     API service for URL shortening with analytics
-// @termsOfService  http://swagger.io/terms/
-
-// @contact.name   API Support
-// @contact.email  support@quocbui.dev
-
-// @license.name  MIT
-// @license.url   http://opensource.org/licenses/MIT
-
-// @host      localhost:8080
-// @BasePath  /api/v1
-
+// @title URL Shortener API
+// @version 1.0
+// @host localhost:8080
+// @BasePath /api/v1
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
-// @description Type "Bearer" followed by a space and JWT token.
 
 func main() {
 	if err := godotenv.Load(); err != nil {

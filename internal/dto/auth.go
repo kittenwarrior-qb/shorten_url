@@ -14,15 +14,15 @@ type MessageResponse struct {
 
 // RegisterRequest represents a user registration request
 type RegisterRequest struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required,min=6"`
-	Name     string `json:"name" binding:"required,min=2"`
+	Email    string `json:"email" binding:"required,email" example:"user@gmail.com"`
+	Password string `json:"password" binding:"required" example:"123"`
+	Name     string `json:"name" binding:"required" example:"user"`
 }
 
 // LoginRequest represents a user login request
 type LoginRequest struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required"`
+	Email    string `json:"email" binding:"required,email" example:"user@gmail.com"`
+	Password string `json:"password" binding:"required" example:"123"`
 }
 
 // LoginResponse represents a successful login response
