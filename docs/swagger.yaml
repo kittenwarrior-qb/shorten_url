@@ -112,6 +112,14 @@ definitions:
       message:
         type: string
     type: object
+  dto.PublicLinkResponse:
+    properties:
+      link:
+        $ref: '#/definitions/dto.LinkResponse'
+      token:
+        description: JWT token for guest user
+        type: string
+    type: object
   dto.RegisterRequest:
     properties:
       email:
@@ -315,7 +323,7 @@ paths:
       tags:
       - links
     get:
-      description: Get link detail with analytics for authenticated user
+      description: Get link detail with analytics
       parameters:
       - description: Short code
         in: path
@@ -346,11 +354,12 @@ paths:
       summary: Get link detail
       tags:
       - links
-  /me/shorten:
+  /shorten:
     post:
       consumes:
       - application/json
-      description: Create shortened link for authenticated user
+      description: Create shortened link. If token provided, link belongs to that
+        user. Otherwise creates guest account.
       parameters:
       - description: Create link request
         in: body
@@ -364,13 +373,9 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/dto.LinkResponse'
+            $ref: '#/definitions/dto.PublicLinkResponse'
         "400":
           description: Bad Request
-          schema:
-            $ref: '#/definitions/dto.ErrorResponse'
-        "401":
-          description: Unauthorized
           schema:
             $ref: '#/definitions/dto.ErrorResponse'
         "409":
@@ -379,37 +384,7 @@ paths:
             $ref: '#/definitions/dto.ErrorResponse'
       security:
       - BearerAuth: []
-      summary: Shorten URL (private)
-      tags:
-      - links
-  /shorten:
-    post:
-      consumes:
-      - application/json
-      description: Create anonymous shortened link
-      parameters:
-      - description: Create link request
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/dto.CreateLinkRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/dto.LinkResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/dto.ErrorResponse'
-        "409":
-          description: Conflict
-          schema:
-            $ref: '#/definitions/dto.ErrorResponse'
-      summary: Shorten URL (public)
+      summary: Shorten URL
       tags:
       - links
 securityDefinitions:

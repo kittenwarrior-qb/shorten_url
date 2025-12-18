@@ -34,8 +34,8 @@ func SetupRouter(
 			auth.POST("/login", authHandler.Login)
 		}
 
-		// Public shorten (anonymous)
-		api.POST("/shorten", linkHandler.ShortenPublic)
+		// Shorten - works with or without token
+		api.POST("/shorten", linkHandler.Shorten)
 	}
 
 	// Protected routes
@@ -43,13 +43,12 @@ func SetupRouter(
 	protected.Use(middleware.AuthMiddleware(cfg.JWT.Secret))
 	{
 		protected.GET("", userHandler.GetMe)
-		protected.POST("/shorten", linkHandler.ShortenPrivate)
 		protected.GET("/links", linkHandler.GetMyLinks)
 		protected.GET("/links/:code", linkHandler.GetMyLinkDetail)
 		protected.DELETE("/links/:code", linkHandler.DeleteMyLink)
 	}
 
-	// Redirect route (must be last to avoid conflicts)
+	// Redirect route (must be last)
 	r.GET("/:code", linkHandler.Redirect)
 
 	return r

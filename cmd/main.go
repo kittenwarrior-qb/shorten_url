@@ -68,7 +68,7 @@ func main() {
 	// Initialize handlers
 	authHandler := handlers.NewAuthHandler(authService, cfg.JWT.Secret, cfg.JWT.ExpiryHours)
 	userHandler := handlers.NewUserHandler(userRepo)
-	linkHandler := handlers.NewLinkHandler(linkService, analyticsService, cfg.App.Domain, cfg.ShortCode.Length)
+	linkHandler := handlers.NewLinkHandler(linkService, analyticsService, authService, cfg.App.Domain, cfg.ShortCode.Length, cfg.JWT.Secret, cfg.JWT.ExpiryHours)
 
 	// Setup router
 	r := router.SetupRouter(cfg, authHandler, userHandler, linkHandler)

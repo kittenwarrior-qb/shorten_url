@@ -20,6 +20,12 @@ type LinkResponse struct {
 	CreatedAt   time.Time  `json:"created_at"`
 }
 
+// PublicLinkResponse includes token for guest user
+type PublicLinkResponse struct {
+	Link  LinkResponse `json:"link"`
+	Token string       `json:"token,omitempty"` // JWT token for guest user
+}
+
 // ListLinksResponse represents a paginated list of links
 type ListLinksResponse struct {
 	Links   []LinkResponse `json:"links"`

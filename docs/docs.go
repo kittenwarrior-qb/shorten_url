@@ -198,7 +198,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get link detail with analytics for authenticated user",
+                "description": "Get link detail with analytics",
                 "produces": [
                     "application/json"
                 ],
@@ -293,14 +293,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/me/shorten": {
+        "/shorten": {
             "post": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Create shortened link for authenticated user",
+                "description": "Create shortened link. If token provided, link belongs to that user. Otherwise creates guest account.",
                 "consumes": [
                     "application/json"
                 ],
@@ -310,7 +310,7 @@ const docTemplate = `{
                 "tags": [
                     "links"
                 ],
-                "summary": "Shorten URL (private)",
+                "summary": "Shorten URL",
                 "parameters": [
                     {
                         "description": "Create link request",
@@ -326,59 +326,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/dto.LinkResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/dto.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/dto.ErrorResponse"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/dto.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/shorten": {
-            "post": {
-                "description": "Create anonymous shortened link",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "links"
-                ],
-                "summary": "Shorten URL (public)",
-                "parameters": [
-                    {
-                        "description": "Create link request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.CreateLinkRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/dto.LinkResponse"
+                            "$ref": "#/definitions/dto.PublicLinkResponse"
                         }
                     },
                     "400": {
@@ -596,6 +544,18 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.PublicLinkResponse": {
+            "type": "object",
+            "properties": {
+                "link": {
+                    "$ref": "#/definitions/dto.LinkResponse"
+                },
+                "token": {
+                    "description": "JWT token for guest user",
                     "type": "string"
                 }
             }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -11,77 +12,52 @@ import (
 	"quocbui.dev/m/internal/middleware"
 	"quocbui.dev/m/internal/models"
 	"quocbui.dev/m/internal/service"
+	"quocbui.dev/m/pkg/utils"
 )
 
 type LinkHandler struct {
 	linkService      *service.LinkService
 	analyticsService *service.AnalyticsService
+	authService      *service.AuthService
 	domain           string
 	shortCodeLength  int
+	jwtSecret        string
+	jwtExpiry        int
 }
 
-func NewLinkHandler(linkService *service.LinkService, analyticsService *service.AnalyticsService, domain string, shortCodeLength int) *LinkHandler {
+func NewLinkHandler(
+	linkService *service.LinkService,
+	analyticsService *service.AnalyticsService,
+	authService *service.AuthService,
+	domain string,
+	shortCodeLength int,
+	jwtSecret string,
+	jwtExpiry int,
+) *LinkHandler {
 	return &LinkHandler{
 		linkService:      linkService,
 		analyticsService: analyticsService,
+		authService:      authService,
 		domain:           domain,
 		shortCodeLength:  shortCodeLength,
+		jwtSecret:        jwtSecret,
+		jwtExpiry:        jwtExpiry,
 	}
 }
 
-// ShortenPublic godoc
-// @Summary      Shorten URL (public)
-// @Description  Create anonymous shortened link
-// @Tags         links
-// @Accept       json
-// @Produce      json
-// @Param        request body dto.CreateLinkRequest true "Create link request"
-// @Success      201 {object} dto.LinkResponse
-// @Failure      400 {object} dto.ErrorResponse
-// @Failure      409 {object} dto.ErrorResponse
-// @Router       /shorten [post]
-func (h *LinkHandler) ShortenPublic(c *gin.Context) {
-	var req dto.CreateLinkRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	var expiresAt *time.Time
-	if req.ExpiresIn != nil {
-		t := time.Now().Add(time.Duration(*req.ExpiresIn) * time.Hour)
-		expiresAt = &t
-	}
-
-	link, err := h.linkService.CreateLink(req.URL, req.Alias, nil, expiresAt, h.shortCodeLength)
-	if err != nil {
-		h.handleLinkError(c, err)
-		return
-	}
-
-	c.JSON(http.StatusCreated, h.toLinkResponse(link))
-}
-
-// ShortenPrivate godoc
-// @Summary      Shorten URL (private)
-// @Description  Create shortened link for authenticated user
+// Shorten godoc
+// @Summary      Shorten URL
+// @Description  Create shortened link. If token provided, link belongs to that user. Otherwise creates guest account.
 // @Tags         links
 // @Accept       json
 // @Produce      json
 // @Security     BearerAuth
 // @Param        request body dto.CreateLinkRequest true "Create link request"
-// @Success      201 {object} dto.LinkResponse
+// @Success      201 {object} dto.PublicLinkResponse
 // @Failure      400 {object} dto.ErrorResponse
-// @Failure      401 {object} dto.ErrorResponse
 // @Failure      409 {object} dto.ErrorResponse
-// @Router       /me/shorten [post]
-func (h *LinkHandler) ShortenPrivate(c *gin.Context) {
-	userID, ok := middleware.GetUserID(c)
-	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
-		return
-	}
-
+// @Router       /shorten [post]
+func (h *LinkHandler) Shorten(c *gin.Context) {
 	var req dto.CreateLinkRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -94,13 +70,45 @@ func (h *LinkHandler) ShortenPrivate(c *gin.Context) {
 		expiresAt = &t
 	}
 
-	link, err := h.linkService.CreateLink(req.URL, req.Alias, &userID, expiresAt, h.shortCodeLength)
+	var userID *uint
+	var token string
+
+	// Check if user is authenticated
+	authHeader := c.GetHeader("Authorization")
+	if authHeader != "" {
+		tokenString := authHeader
+		if strings.HasPrefix(authHeader, "Bearer ") {
+			tokenString = strings.TrimPrefix(authHeader, "Bearer ")
+		}
+		claims, err := utils.ValidateToken(tokenString, h.jwtSecret)
+		if err == nil {
+			userID = &claims.UserID
+		}
+	}
+
+	// If no valid token, create guest user
+	if userID == nil {
+		guestEmail := fmt.Sprintf("guest_%d@temp.local", time.Now().UnixNano())
+		guestPass := fmt.Sprintf("guest_%d", time.Now().UnixNano())
+		guestUser, err := h.authService.Register(guestEmail, guestPass, "Guest")
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create guest account"})
+			return
+		}
+		userID = &guestUser.ID
+		token, _ = utils.GenerateToken(guestUser.ID, guestUser.Email, h.jwtSecret, h.jwtExpiry)
+	}
+
+	link, err := h.linkService.CreateLink(req.URL, req.Alias, userID, expiresAt, h.shortCodeLength)
 	if err != nil {
 		h.handleLinkError(c, err)
 		return
 	}
 
-	c.JSON(http.StatusCreated, h.toLinkResponse(link))
+	c.JSON(http.StatusCreated, dto.PublicLinkResponse{
+		Link:  h.toLinkResponse(link),
+		Token: token,
+	})
 }
 
 // Redirect godoc
@@ -114,13 +122,11 @@ func (h *LinkHandler) ShortenPrivate(c *gin.Context) {
 // @Router       /{code} [get]
 func (h *LinkHandler) Redirect(c *gin.Context) {
 	code := c.Param("code")
-
 	clickInfo := &service.ClickInfo{
 		IPAddress: c.ClientIP(),
 		UserAgent: c.GetHeader("User-Agent"),
 		Referer:   c.GetHeader("Referer"),
 	}
-
 	originalURL, err := h.linkService.Redirect(code, clickInfo)
 	if err != nil {
 		if err == service.ErrLinkNotFound {
@@ -134,7 +140,6 @@ func (h *LinkHandler) Redirect(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
 		return
 	}
-
 	c.Redirect(http.StatusMovedPermanently, originalURL)
 }
 
@@ -155,28 +160,23 @@ func (h *LinkHandler) GetMyLinks(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
 		return
 	}
-
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	perPage, _ := strconv.Atoi(c.DefaultQuery("per_page", "10"))
-
 	if page < 1 {
 		page = 1
 	}
 	if perPage < 1 || perPage > 100 {
 		perPage = 10
 	}
-
 	links, total, err := h.linkService.GetUserLinks(userID, page, perPage)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch links"})
 		return
 	}
-
 	linkResponses := make([]dto.LinkResponse, len(links))
 	for i, link := range links {
 		linkResponses[i] = h.toLinkResponse(link)
 	}
-
 	c.JSON(http.StatusOK, dto.ListLinksResponse{
 		Links:   linkResponses,
 		Total:   total,
@@ -187,7 +187,7 @@ func (h *LinkHandler) GetMyLinks(c *gin.Context) {
 
 // GetMyLinkDetail godoc
 // @Summary      Get link detail
-// @Description  Get link detail with analytics for authenticated user
+// @Description  Get link detail with analytics
 // @Tags         links
 // @Produce      json
 // @Security     BearerAuth
@@ -203,9 +203,7 @@ func (h *LinkHandler) GetMyLinkDetail(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
 		return
 	}
-
 	code := c.Param("code")
-
 	link, err := h.linkService.GetLinkWithAnalytics(code, userID)
 	if err != nil {
 		if err == service.ErrLinkNotFound {
@@ -219,9 +217,7 @@ func (h *LinkHandler) GetMyLinkDetail(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
 		return
 	}
-
 	analytics, _ := h.analyticsService.GetAnalyticsSummary(link.ID, userID)
-
 	c.JSON(http.StatusOK, dto.LinkDetailResponse{
 		Link:      h.toLinkResponse(link),
 		Analytics: analytics,
@@ -246,9 +242,7 @@ func (h *LinkHandler) DeleteMyLink(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
 		return
 	}
-
 	code := c.Param("code")
-
 	err := h.linkService.DeleteLink(code, userID)
 	if err != nil {
 		if err == service.ErrLinkNotFound {
@@ -262,7 +256,6 @@ func (h *LinkHandler) DeleteMyLink(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
 		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{"message": "link deleted successfully"})
 }
 
