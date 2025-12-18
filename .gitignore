@@ -8,7 +8,7 @@ bin/
 
 # Test binary
 *.test
-
+.kiro
 # Output of go coverage
 *.out
 coverage.html
