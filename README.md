@@ -206,4 +206,4 @@ go s.trackClick(link.ID, clickInfo)  // Không block redirect
 - Metrics & monitoring 
 - Structured logging 
 - Database backup 
-- Thiếu tính năng nghiệp vụ
+- Tính năng nghiệp vụ
