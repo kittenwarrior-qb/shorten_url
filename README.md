@@ -8,291 +8,202 @@ Backend Service rút gọn link tương tự bit.ly, tinyurl - Golang.
 
 User có URL dài muốn rút gọn thành link ngắn. Khi truy cập link ngắn sẽ tự động redirect về URL gốc và hệ thống tracking số lượt click, thông tin thiết bị, vị trí.
 
-**Ví dụ:**
 ```
 Input:  https://example.com/very/long/path?param1=value1&param2=value2
 Output: https://shorten.quocbui.dev/abc123
 ```
 
-## Tính năng đã có
+## Tính năng
 
-- Tạo link rút gọn (Đăng nhập/không đăng nhập)
-- Custom alias (cho phép nhập: vd:  https://shorten.quocbui.dev/abc123)
-- Link expiration (vd: 24 giờ)
-- Analytics: click, browser, OS, device, country
+- Tạo link rút gọn (có/không đăng nhập)
+- Custom alias (vd: `/my-link`)
+- Link expiration
+- Analytics: click count, browser, OS, device, country
 - QR Code với logo
 - Rate limiting (100 req/60s)
+- JWT Authentication
 - Swagger API docs
-- JWT
 
 ## Tech Stack
 
-| Stack | Công nghệ | Ưu điểm |
-|-----------|------------|------------|
-| Language | Go 1.24 | Performance, concurrency tốt, compile nhẹ và đơn giản hơn so với Node.js hay Java |
-| Framework | Gin | Framework nhẹ, phổ biến |
-| Database | PostgreSQL | Tài liệu support tốt, ổn định với GORM |
-| ORM | GORM | Auto migration, query builder |
-| Auth | JWT | Hỗ trợ tốt cho RestAPI và scale sau này |
-| Docs | Swagger | Hỗ trợ cho dev |
-| Deploy | Docker + Caddy | Deploy dễ, config dễ hơn so với nginx |
+| Component | Choice | Lý do |
+|-----------|--------|-------|
+| Language | Go 1.24 | Performance cao, concurrency native, binary nhẹ |
+| Framework | Gin | Lightweight, ecosystem tốt |
+| Database | PostgreSQL | ACID, indexing mạnh, GORM support tốt |
+| Auth | JWT | Stateless, scale horizontal dễ |
+| Deploy | Docker + Caddy | Auto HTTPS, config đơn giản hơn Nginx |
 
-## Cách chạy project
+## Cách chạy
 
 ### Local
-
 ```bash
-# 1. Clone repo
 git clone https://github.com/quocbui2020/shorten_url.git
 cd shorten_url
-
-# 2. Copy env file
 cp .env.example .env
-
-# 3. Sửa .env với database credentials
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=123
-DB_NAME=shorten_url
-
-# 4. Chạy server
+# Sửa DB credentials trong .env
 go run cmd/main.go
-
-# 5. Truy cập
-# API: http://localhost:8080
-# Swagger: http://localhost:8080/swagger/index.html
+# → http://localhost:8080/swagger/index.html
 ```
 
 ### Docker
-
 ```bash
-# 1. Sửa .env 
-APP_DOMAIN=localhost:8080
-JWT_SECRET=your-super-secret-key
-DB_PASSWORD=123
-
-# 2. Chạy
+cp .env.example .env
 docker-compose up -d --build
-
 ```
 
-## Endpoints đã có
+## API Endpoints
 
 | Method | Endpoint | Mô tả |
 |--------|----------|-------|
-| POST | /api/v1/auth/register | Đăng ký |
-| POST | /api/v1/auth/login | Đăng nhập (email,password) |
-| POST | /api/v1/shorten | Tạo link rút gọn (url gốc, alias, expired_in) |
-| GET | /api/v1/me | Thông tin user (email+name) |
-| GET | /api/v1/me/links | Danh sách links đã tạo của user |
-| GET | /api/v1/me/links/:code | Chi tiết analytics của link (click, browser, device,...) |
-| DELETE | /api/v1/me/links/:code | Xóa link (soft delete) |
-| GET | /:code | Logic để redirect |
+| POST | `/api/v1/auth/register` | Đăng ký |
+| POST | `/api/v1/auth/login` | Đăng nhập |
+| POST | `/api/v1/shorten` | Tạo link rút gọn |
+| GET | `/api/v1/me/links` | Danh sách links của user |
+| GET | `/api/v1/me/links/:code` | Chi tiết + analytics |
+| DELETE | `/api/v1/me/links/:code` | Xóa link (soft delete) |
+| GET | `/:code` | Redirect về URL gốc |
 
-*Nếu không có token, tự động tạo guest account và trả về token.
-
-## Thiết kế & Quyết định kỹ thuật
-
-### Database Schema
+## Thiết kế Database
 
 ```
-users => 1:N => links => 1:N => clicks
+users (1) ──→ (N) links (1) ──→ (N) clicks
 ```
-![Database Entity Diagram](assets/readme/database-entity.png)
 
-**Tại sao chọn PostgreSQL?**
-- ACID compliance cho data integrity
-- Index B-tree cho lookup short_code O(log n)
-- Soft delete với deleted_at
-- JSON support nếu cần mở rộng
+**Indexes:**
+- `links.short_code` - UNIQUE, lookup O(1)
+- `links.user_id` - Query links theo user
+- `links.expires_at` - Filter expired links
+- `clicks.link_id` - Aggregate analytics
+- `clicks.clicked_at` - Time-series queries
 
-### Thuật toán generate short code
+**Tại sao PostgreSQL thay vì NoSQL?**
+- Cần ACID cho việc tạo short code unique
+- Foreign key đảm bảo data integrity
+- Aggregate queries cho analytics phức tạp
+- GORM migration tự động
+
+## Thuật toán Generate Short Code
 
 ```go
 const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 // 62^6 = 56.8 tỷ combinations
 ```
 
-- Dùng `crypto/rand` thay vì `math/rand` để secure
-- Retry 5 lần nếu bị trùng
-- Custom alias validate: 3-20 ký tự, alphanumeric + `_` + `-`
+- Dùng `crypto/rand`
+- Retry tối đa 5 lần 
+- Custom alias: 3-20 ký tự
 
-### Xử lý Concurrency
+**Tại sao không dùng hash (MD5/SHA)**
+- Random 6 chars với 62 charset đủ cho scale vừa
+- Đơn giản, dễ debug
 
-**Vấn đề:** 2 requests cùng lúc tạo link với cùng alias?
+## Xử lý Concurrency
+
+**Vấn đề:** 2 requests cùng tạo link với alias "my-link" cùng lúc?
 
 **Giải pháp:**
-- Database UNIQUE constraint trên `short_code`
-- Check existence trước khi insert
-- Nếu insert fail do duplicate → retry với code mới
-
 ```go
-for i := 0; i < 5; i++ {
-    shortCode = generateCode()
-    if !exists(shortCode) {
-        break
+// Transaction
+err = s.txManager.ExecuteInTransaction(func(tx *gorm.DB) error {
+    existing, _ := s.linkRepo.GetByShortCodeForUpdate(tx, *customAlias)
+    if existing != nil {
+        return ErrAliasAlreadyExists
     }
-}
+    return s.linkRepo.CreateWithTx(tx, link)
+})
 ```
 
-### Click Tracking
-
-```go
-// Async tracking - không block redirect
-go s.trackClick(linkID, clickInfo)
-return originalURL
-```
-
-- Parse User-Agent → browser, OS, device
-- GeoIP lookup → country, city (ip-api.com free tier)
-- Aggregate stats trong bảng clicks
+- Row-level locking ngăn race condition
 
 ## Trade-offs
 
 ### 1. Guest User vs Anonymous Links
+**Chọn:** Tự động tạo guest account khi shorten không có token
 
-**Chọn:** Tự động tạo guest user khi shorten không có token
-
-**Lý do:**
+**Ưu điểm:**
 - User có thể xem lại links đã tạo
-- Có analytics cho mọi link
-- Dễ convert guest → registered user sau
+- Mọi link đều có analytics
+- Dễ convert guest thành registered user sau này
 
 **Nhược điểm:**
-- Tạo nhiều guest users trong DB
-- Cần cleanup job cho guest users cũ
+- Tạo nhiều records, cần cleanup job
 
-### 2. GeoIP: External API vs Local Database
+### 2. QR Code Generation
+**Chọn:** Generate on-the-fly, trả về base64
 
-**Chọn:** External API (ip-api.com)
-
-**Lý do:**
-- Không cần maintain GeoIP database
-- Free tier đủ dùng (45 req/min)
-- Data luôn up-to-date
-
-**Nhược điểm:**
-- Dependency external service
-- Rate limit
-- Latency (nhưng async nên không ảnh hưởng)
-
-### 3. QR Code: Generate on-demand vs Pre-generate
-
-**Chọn:** Generate on-demand
-
-**Lý do:**
+**Ưu điểm:**
 - Không tốn storage
-- Luôn có QR mới nhất
+- Luôn up-to-date
 
 **Nhược điểm:**
-- CPU cost mỗi request
-- Có thể cache nếu cần optimize
+- Tốn CPU mỗi request
+- *Cải thiện:* Cache với Redis hoặc pre-generate
+
+### 3. Click Tracking
+**Chọn:** Async goroutine + transaction
+
+```go
+go s.trackClick(link.ID, clickInfo)  // Không block redirect
+```
+
+**Ưu điểm:**
+- Redirect response nhanh 
+- Transaction đảm bảo click record + click_count
+
+**Nhược điểm:**
+- Có thể mất click nếu server crash giữa chừng
+- *Cải thiện:* Message queue (Kafka/RabbitMQ)
 
 ## Challenges & Solutions
 
-### 1. Go Version Mismatch
+### 1. Race Condition khi tạo Custom Alias
+**Vấn đề:** Check exist → Insert có gap, 2 requests có thể cùng pass check
 
-**Vấn đề:** Local Go 1.24, Docker image chỉ có 1.23
+**Giải pháp:** `SELECT ... FOR UPDATE` lock row trong transaction
 
-**Giải pháp:** Dùng `golang:latest` trong Dockerfile
+### 2. N+1 Query trong Analytics
+**Vấn đề:** Aggregate browser, OS, device, country riêng lẻ
 
-### 2. QR Code Logo
+**Giải pháp:** Batch queries với GROUP BY
 
-**Vấn đề:** Logo không hiển thị, file format không đúng
+## Security Considerations
 
-**Giải pháp:** 
-- Check file format thật (không chỉ extension)
-- Resize logo < 1/3 QR size
-- Dùng ErrorCorrectionHighest để QR vẫn scan được với logo
+- **Rate Limiting:** IP-based, 100 req/60s
+- **URL Validation:** Chỉ accept http/https, max 2048 chars
+- **Soft Delete:** Links không bị xóa khỏi db
 
-### 3. Swagger Host Hardcoded
+## Performance Considerations
 
-**Vấn đề:** Swagger luôn gọi localhost
+### Nếu có 1 triệu links
 
-**Giải pháp:** Dynamic host từ env
-```go
-docs.SwaggerInfo.Host = cfg.App.Domain
-```
+| Vấn đề | Giải pháp | Giải thích |
+|--------|-----------|------------|
+| query chậm | `short_code` UNIQUE INDEX GORM tích hợp sẵn | B-tree index giúp tìm kiếm O(log n) thay vì O(n). Với 1M records, chỉ cần ~20 comparisons thay vì scan toàn bộ table |
+| response lớn | Đã có Pagination | Không load hết 1M links vào memory. Dùng OFFSET/LIMIT, trả về 10-50 records/page |
+| Connection limit | Connection pooling | GORM mặc định pool connections, reuse thay vì tạo mới mỗi request.  |
+
+### Nếu traffic tăng 100x
+
+| Vấn đề | Giải pháp | Giải thích |
+|--------|-----------|------------|
+| DB quá tải khi redirect | **Redis cache** | Lưu link hay dùng vào bộ nhớ tạm. Truy cập nhanh hơn nhiều so với query DB mỗi lần |
+| Query analytics chậm | **Read replicas** | Có thể scale DB phụ để đọc báo cáo, DB chính chỉ lo ghi. Hai việc không chặn nhau |
+| Mất click khi traffic cao | **Message queue** | Gửi tất cả click vào hàng đợi trước, xử lý sau (Job). Không sợ mất dữ liệu khi server bận |
 
 ## Limitations & Future Improvements
 
 ### Hiện tại còn thiếu
-
-- [ ] Unit tests
-- [ ] Integration tests
-- [ ] Caching layer (Redis)
-- [ ] Bulk URL shortening
-- [ ] Link edit (update URL)
-- [ ] Custom domain per user
-- [ ] Webhook notifications
+- Custom domain cho user
+- Hệ thống trả phí cho user
+- Quản lý user auth đầy đủ
+- Quản lý realtime cho analytics overview
+- Phân quyền
 
 ### Production-ready cần thêm
-
-1. **Caching:** Redis cho hot links
-2. **CDN:** Cache redirect responses
-3. **Monitoring:** Prometheus + Grafana
-4. **Logging:** Structured logging (Zap/Zerolog)
-5. **Database:** Read replicas, connection pooling
-6. **Security:** HTTPS only, CSP headers, input sanitization
-7. **Cleanup Job:** Xóa expired links, guest users cũ
-
-### Scalability Plan
-
-```
-                    ┌─────────────┐
-                    │   Caddy/    │
-                    │   Nginx     │
-                    └──────┬──────┘
-                           │
-              ┌────────────┼────────────┐
-              │            │            │
-        ┌─────▼─────┐ ┌────▼────┐ ┌─────▼─────┐
-        │   App 1   │ │  App 2  │ │   App 3   │
-        └─────┬─────┘ └────┬────┘ └─────┬─────┘
-              │            │            │
-              └────────────┼────────────┘
-                           │
-                    ┌──────▼──────┐
-                    │    Redis    │
-                    │   (Cache)   │
-                    └──────┬──────┘
-                           │
-              ┌────────────┼────────────┐
-              │            │            │
-        ┌─────▼─────┐ ┌────▼────┐
-        │  Primary  │ │ Replica │
-        │    DB     │ │   DB    │
-        └───────────┘ └─────────┘
-```
-
-## Project Structure
-
-```
-shorten_url_go/
-├── cmd/
-│   └── main.go              # Entry point
-├── internal/
-│   ├── config/              # Configuration
-│   ├── dto/                 # Request/Response DTOs
-│   ├── handlers/            # HTTP handlers
-│   ├── middleware/          # Auth, CORS, Rate limit
-│   ├── models/              # Database models
-│   ├── repository/          # Data access layer
-│   ├── router/              # Route definitions
-│   └── service/             # Business logic
-├── pkg/
-│   └── utils/               # Shared utilities
-├── assets/                  # Static files (logo)
-├── docs/                    # Swagger generated
-├── Dockerfile
-├── docker-compose.yml
-├── Caddyfile
-└── README.md
-```
-
-## Author
-
-**Quoc Bui**
-- GitHub: [@quocbui2020](https://github.com/quocbui2020)
-- Email: quocbui26042005@gmail.com
+- Distributed rate limiting scale lên Redis
+- Unit tests, Integration tests và CI/CD actions
+- Metrics & monitoring 
+- Structured logging 
+- Database backup 
+- Thiếu tính năng nghiệp vụ
