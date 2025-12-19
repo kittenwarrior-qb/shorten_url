@@ -193,6 +193,9 @@ go s.trackClick(link.ID, clickInfo)  // Không block redirect
 
 ## Limitations & Future Improvements
 
+### Referer Tracking
+Facebook, Instagram và nhiều social platforms set `Referrer-Policy: no-referrer` khi redirect ra external links. Nghĩa là khi user click link từ Facebook, server không nhận được referer header → hiển thị "Direct".
+
 ### Hiện tại còn thiếu
 - Custom domain cho user
 - Hệ thống trả phí cho user

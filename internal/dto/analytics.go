@@ -4,12 +4,13 @@ import "time"
 
 // AnalyticsSummary contains aggregated analytics data
 type AnalyticsSummary struct {
-	TotalClicks int64            `json:"total_clicks"`
-	Browsers    map[string]int64 `json:"browsers,omitempty"`
-	OS          map[string]int64 `json:"os,omitempty"`
-	Devices     map[string]int64 `json:"devices,omitempty"`
-	Countries   map[string]int64 `json:"countries,omitempty"`
-	Referers    map[string]int64 `json:"referers,omitempty"`
+	TotalClicks    int64            `json:"total_clicks"`
+	Browsers       map[string]int64 `json:"browsers,omitempty"`
+	OS             map[string]int64 `json:"os,omitempty"`
+	Devices        map[string]int64 `json:"devices,omitempty"`
+	Countries      map[string]int64 `json:"countries,omitempty"`
+	RefererSources map[string]int64 `json:"referer_sources,omitempty"` // Facebook, Google, Direct...
+	RefererDomains map[string]int64 `json:"referer_domains,omitempty"` // Chi tiết domain
 }
 
 // ClickResponse represents a single click event

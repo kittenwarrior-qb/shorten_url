@@ -125,25 +125,24 @@ func (s *LinkService) Redirect(shortCode string, clickInfo *ClickInfo) (string, 
 // trackClick records a click event with transaction support
 // Ensures click record and click_count are updated atomically
 func (s *LinkService) trackClick(linkID uint, info *ClickInfo) {
-	// Parse user agent
 	uaInfo := utils.ParseUserAgent(info.UserAgent)
-
-	// Get geo info
 	geoInfo, _ := s.geoIP.GetGeoIP(info.IPAddress)
+	refInfo := utils.ParseReferer(info.Referer)
 
-	// Create click record
 	click := &models.Click{
-		LinkID:      linkID,
-		IPAddress:   info.IPAddress,
-		UserAgent:   info.UserAgent,
-		Browser:     uaInfo.Browser,
-		BrowserVer:  uaInfo.BrowserVer,
-		OS:          uaInfo.OS,
-		Device:      uaInfo.Device,
-		Country:     geoInfo.Country,
-		CountryCode: geoInfo.CountryCode,
-		City:        geoInfo.City,
-		Referer:     info.Referer,
+		LinkID:        linkID,
+		IPAddress:     info.IPAddress,
+		UserAgent:     info.UserAgent,
+		Browser:       uaInfo.Browser,
+		BrowserVer:    uaInfo.BrowserVer,
+		OS:            uaInfo.OS,
+		Device:        uaInfo.Device,
+		Country:       geoInfo.Country,
+		CountryCode:   geoInfo.CountryCode,
+		City:          geoInfo.City,
+		Referer:       info.Referer,
+		RefererSource: refInfo.Source,
+		RefererDomain: refInfo.Domain,
 	}
 
 	// Use transaction to ensure atomicity:

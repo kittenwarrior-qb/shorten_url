@@ -121,20 +121,39 @@ func (r *clickRepository) GetAnalytics(linkID uint) (*dto.AnalyticsSummary, erro
 		}
 	}
 
-	// Referer stats
-	var refererResults []struct {
-		Referer string
-		Count   int64
+	// Referer source stats (Facebook, Google, Direct...)
+	var sourceResults []struct {
+		RefererSource string
+		Count         int64
 	}
 	r.db.Model(&models.Click{}).
-		Select("referer, count(*) as count").
-		Where("link_id = ? AND referer != ''", linkID).
-		Group("referer").
-		Scan(&refererResults)
-	if len(refererResults) > 0 {
-		summary.Referers = make(map[string]int64)
-		for _, ref := range refererResults {
-			summary.Referers[ref.Referer] = ref.Count
+		Select("referer_source, count(*) as count").
+		Where("link_id = ?", linkID).
+		Group("referer_source").
+		Scan(&sourceResults)
+	if len(sourceResults) > 0 {
+		summary.RefererSources = make(map[string]int64)
+		for _, s := range sourceResults {
+			summary.RefererSources[s.RefererSource] = s.Count
+		}
+	}
+
+	// Referer domain stats (chi tiết)
+	var domainResults []struct {
+		RefererDomain string
+		Count         int64
+	}
+	r.db.Model(&models.Click{}).
+		Select("referer_domain, count(*) as count").
+		Where("link_id = ? AND referer_domain != ''", linkID).
+		Group("referer_domain").
+		Order("count DESC").
+		Limit(10).
+		Scan(&domainResults)
+	if len(domainResults) > 0 {
+		summary.RefererDomains = make(map[string]int64)
+		for _, d := range domainResults {
+			summary.RefererDomains[d.RefererDomain] = d.Count
 		}
 	}
 
