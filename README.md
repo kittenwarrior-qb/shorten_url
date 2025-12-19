@@ -210,3 +210,7 @@ Facebook, Instagram và nhiều social platforms set `Referrer-Policy: no-referr
 - Structured logging 
 - Database backup 
 - Tính năng nghiệp vụ
+
+## Screenshots
+
+![Links Code Response](assets/readme/links-code-response.png)
