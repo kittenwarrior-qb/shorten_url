@@ -377,35 +377,35 @@
         "dto.AnalyticsSummary": {
             "type": "object",
             "properties": {
-                "browser_stats": {
+                "browsers": {
                     "type": "object",
                     "additionalProperties": {
                         "type": "integer",
                         "format": "int64"
                     }
                 },
-                "country_stats": {
+                "countries": {
                     "type": "object",
                     "additionalProperties": {
                         "type": "integer",
                         "format": "int64"
                     }
                 },
-                "device_stats": {
+                "devices": {
                     "type": "object",
                     "additionalProperties": {
                         "type": "integer",
                         "format": "int64"
                     }
                 },
-                "os_stats": {
+                "os": {
                     "type": "object",
                     "additionalProperties": {
                         "type": "integer",
                         "format": "int64"
                     }
                 },
-                "referer_stats": {
+                "referers": {
                     "type": "object",
                     "additionalProperties": {
                         "type": "integer",

@@ -2,27 +2,27 @@ basePath: /api/v1
 definitions:
   dto.AnalyticsSummary:
     properties:
-      browser_stats:
+      browsers:
         additionalProperties:
           format: int64
           type: integer
         type: object
-      country_stats:
+      countries:
         additionalProperties:
           format: int64
           type: integer
         type: object
-      device_stats:
+      devices:
         additionalProperties:
           format: int64
           type: integer
         type: object
-      os_stats:
+      os:
         additionalProperties:
           format: int64
           type: integer
         type: object
-      referer_stats:
+      referers:
         additionalProperties:
           format: int64
           type: integer

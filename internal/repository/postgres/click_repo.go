@@ -45,12 +45,7 @@ func (r *clickRepository) GetAnalytics(linkID uint) (*dto.AnalyticsSummary, erro
 	r.db.Model(&models.Click{}).Where("link_id = ?", linkID).Count(&totalClicks)
 
 	summary := &dto.AnalyticsSummary{
-		TotalClicks:  totalClicks,
-		BrowserStats: make(map[string]int64),
-		OSStats:      make(map[string]int64),
-		DeviceStats:  make(map[string]int64),
-		CountryStats: make(map[string]int64),
-		RefererStats: make(map[string]int64),
+		TotalClicks: totalClicks,
 	}
 
 	// Browser stats
@@ -63,8 +58,11 @@ func (r *clickRepository) GetAnalytics(linkID uint) (*dto.AnalyticsSummary, erro
 		Where("link_id = ?", linkID).
 		Group("browser").
 		Scan(&browserResults)
-	for _, b := range browserResults {
-		summary.BrowserStats[b.Browser] = b.Count
+	if len(browserResults) > 0 {
+		summary.Browsers = make(map[string]int64)
+		for _, b := range browserResults {
+			summary.Browsers[b.Browser] = b.Count
+		}
 	}
 
 	// OS stats
@@ -77,8 +75,11 @@ func (r *clickRepository) GetAnalytics(linkID uint) (*dto.AnalyticsSummary, erro
 		Where("link_id = ?", linkID).
 		Group("os").
 		Scan(&osResults)
-	for _, o := range osResults {
-		summary.OSStats[o.OS] = o.Count
+	if len(osResults) > 0 {
+		summary.OS = make(map[string]int64)
+		for _, o := range osResults {
+			summary.OS[o.OS] = o.Count
+		}
 	}
 
 	// Device stats
@@ -91,8 +92,11 @@ func (r *clickRepository) GetAnalytics(linkID uint) (*dto.AnalyticsSummary, erro
 		Where("link_id = ?", linkID).
 		Group("device").
 		Scan(&deviceResults)
-	for _, d := range deviceResults {
-		summary.DeviceStats[d.Device] = d.Count
+	if len(deviceResults) > 0 {
+		summary.Devices = make(map[string]int64)
+		for _, d := range deviceResults {
+			summary.Devices[d.Device] = d.Count
+		}
 	}
 
 	// Country stats
@@ -105,8 +109,11 @@ func (r *clickRepository) GetAnalytics(linkID uint) (*dto.AnalyticsSummary, erro
 		Where("link_id = ?", linkID).
 		Group("country").
 		Scan(&countryResults)
-	for _, c := range countryResults {
-		summary.CountryStats[c.Country] = c.Count
+	if len(countryResults) > 0 {
+		summary.Countries = make(map[string]int64)
+		for _, c := range countryResults {
+			summary.Countries[c.Country] = c.Count
+		}
 	}
 
 	// Referer stats
@@ -119,8 +126,11 @@ func (r *clickRepository) GetAnalytics(linkID uint) (*dto.AnalyticsSummary, erro
 		Where("link_id = ? AND referer != ''", linkID).
 		Group("referer").
 		Scan(&refererResults)
-	for _, ref := range refererResults {
-		summary.RefererStats[ref.Referer] = ref.Count
+	if len(refererResults) > 0 {
+		summary.Referers = make(map[string]int64)
+		for _, ref := range refererResults {
+			summary.Referers[ref.Referer] = ref.Count
+		}
 	}
 
 	return summary, nil
