@@ -1,0 +1,17 @@
+shorten.quocbui.dev {
+    reverse_proxy app:8080
+    
+    encode gzip
+    
+    header {
+        -Server
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        Referrer-Policy strict-origin-when-cross-origin
+    }
+    
+    log {
+        output stdout
+        format console
+    }
+}
