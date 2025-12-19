@@ -3,9 +3,6 @@ FROM golang:latest AS builder
 
 WORKDIR /app
 
-# Install dependencies
-RUN apk add --no-cache git
-
 # Copy go mod files
 COPY go.mod go.sum ./
 RUN go mod download
@@ -21,10 +18,8 @@ FROM alpine:latest
 
 WORKDIR /app
 
-# Install ca-certificates for HTTPS
 RUN apk --no-cache add ca-certificates tzdata
 
-# Copy binary from builder
 COPY --from=builder /app/main .
 COPY --from=builder /app/docs ./docs
 
