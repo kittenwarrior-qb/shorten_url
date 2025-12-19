@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/base64"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -260,12 +261,22 @@ func (h *LinkHandler) DeleteMyLink(c *gin.Context) {
 }
 
 func (h *LinkHandler) toLinkResponse(link *models.Link) dto.LinkResponse {
+	shortURL := fmt.Sprintf("https://%s/%s", h.domain, link.ShortCode)
+
+	// Generate QR code
+	qrCode := ""
+	qrBytes, err := utils.GenerateQRCode(shortURL, "assets/logo.png")
+	if err == nil {
+		qrCode = "data:image/png;base64," + base64.StdEncoding.EncodeToString(qrBytes)
+	}
+
 	return dto.LinkResponse{
 		ID:          link.ID,
 		ShortCode:   link.ShortCode,
-		ShortURL:    fmt.Sprintf("http://%s/%s", h.domain, link.ShortCode),
+		ShortURL:    shortURL,
 		OriginalURL: link.OriginalURL,
 		ClickCount:  link.ClickCount,
+		QRCode:      qrCode,
 		ExpiresAt:   link.ExpiresAt,
 		CreatedAt:   link.CreatedAt,
 	}

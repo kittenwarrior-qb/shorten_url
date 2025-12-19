@@ -16,6 +16,7 @@ type LinkResponse struct {
 	ShortURL    string     `json:"short_url"`
 	OriginalURL string     `json:"original_url"`
 	ClickCount  int64      `json:"click_count"`
+	QRCode      string     `json:"qr_code,omitempty"` // base64 encoded PNG
 	ExpiresAt   *time.Time `json:"expires_at,omitempty"`
 	CreatedAt   time.Time  `json:"created_at"`
 }

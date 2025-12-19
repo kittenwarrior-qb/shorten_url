@@ -481,6 +481,10 @@ const docTemplate = `{
                 "original_url": {
                     "type": "string"
                 },
+                "qr_code": {
+                    "description": "base64 encoded PNG",
+                    "type": "string"
+                },
                 "short_code": {
                     "type": "string"
                 },
