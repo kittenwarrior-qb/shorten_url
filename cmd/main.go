@@ -13,7 +13,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	_ "quocbui.dev/m/docs"
+	"quocbui.dev/m/docs"
 	"quocbui.dev/m/internal/config"
 	"quocbui.dev/m/internal/handlers"
 	"quocbui.dev/m/internal/repository/postgres"
@@ -23,7 +23,6 @@ import (
 
 // @title URL Shortener API
 // @version 1.0
-// @host localhost:8080
 // @BasePath /api/v1
 // @securityDefinitions.apikey BearerAuth
 // @in header
@@ -73,7 +72,8 @@ func main() {
 	// Setup router
 	r := router.SetupRouter(cfg, authHandler, userHandler, linkHandler)
 
-	// Swagger documentation
+	// Swagger documentation - set host dynamically
+	docs.SwaggerInfo.Host = cfg.App.Domain
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Create server
