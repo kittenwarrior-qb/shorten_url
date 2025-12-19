@@ -24,6 +24,4 @@ swagger:
 fmt:
 	go fmt ./...
 
-# Run linter
-lint:
-	golangci-lint run
+

@@ -41,8 +41,8 @@ Output: https://shorten.quocbui.dev/abc123
 git clone https://github.com/quocbui2020/shorten_url.git
 cd shorten_url
 cp .env.example .env
-# Sửa DB credentials trong .env
-go run cmd/main.go
+# Sửa .env credentials 
+make run
 # → http://localhost:8080/swagger/index.html
 ```
 
@@ -50,6 +50,16 @@ go run cmd/main.go
 ```bash
 cp .env.example .env
 docker-compose up -d --build
+```
+
+### Make Commands
+```bash
+make run       # Chạy dev server
+make build     # Build binary ra bin/app
+make test      # Chạy tests với coverage
+make swagger   # Generate Swagger docs
+make tidy      # go mod tidy
+make fmt       # Format code
 ```
 
 ## API Endpoints
@@ -157,39 +167,40 @@ go s.trackClick(link.ID, clickInfo)  // Không block redirect
 
 ## Challenges & Solutions
 
-### 1. Race Condition khi tạo Custom Alias
-**Vấn đề:** Check exist → Insert có gap, 2 requests có thể cùng pass check
+### Race Condition khi tạo Custom Alias
+2 requests cùng muốn alias "my-link", cả 2 check thấy chưa tồn tại → cả 2 insert → lỗi.
 
-**Giải pháp:** `SELECT ... FOR UPDATE` lock row trong transaction
+Fix: Sử dụng `SELECT ... FOR UPDATE` trong transaction, request đầu sẽ lock row, bắt request sau phải đợi.
 
-### 2. N+1 Query trong Analytics
-**Vấn đề:** Aggregate browser, OS, device, country riêng lẻ
+### N+1 Query trong Analytics
+Ban đầu query riêng từng loại (browser, OS, device...) → nhiều round-trip tới DB.
 
-**Giải pháp:** Batch queries với GROUP BY
+Fix: Gom lại thành batch queries với GROUP BY, 1 query lấy hết.
 
-## Security Considerations
+## Security
 
-- **Rate Limiting:** IP-based, 100 req/60s
-- **URL Validation:** Chỉ accept http/https, max 2048 chars
-- **Soft Delete:** Links không bị xóa khỏi db
+- Người dùng không get được links của người khác (jwt)
+- URL phải bắt đầu bằng http/https, tối đa 2048 ký tự
+- Rate limit 100 req/60s theo IP
+- Xóa link với soft delete
 
-## Performance Considerations
+## Performance
 
-### Nếu có 1 triệu links
+### Scale tới 1 triệu links
 
-| Vấn đề | Giải pháp | Giải thích |
-|--------|-----------|------------|
-| query chậm | `short_code` UNIQUE INDEX GORM tích hợp sẵn | B-tree index giúp tìm kiếm O(log n) thay vì O(n). Với 1M records, chỉ cần ~20 comparisons thay vì scan toàn bộ table |
-| response lớn | Đã có Pagination | Không load hết 1M links vào memory. Dùng OFFSET/LIMIT, trả về 10-50 records/page |
-| Connection limit | Connection pooling | GORM mặc định pool connections, reuse thay vì tạo mới mỗi request.  |
+| Vấn đề | Cách xử lý |
+|--------|------------|
+| Query chậm | Index trên `short_code`. B-tree search O(log n), 1M records chỉ cần ~20 lần so sánh |
+| Response nặng | Pagination, mỗi page 10-50 records thay vì load hết |
+| Hết connection | GORM có sẵn connection pool, reuse connection thay vì tạo mới |
 
-### Nếu traffic tăng 100x
+### Scale traffic lên 100x
 
-| Vấn đề | Giải pháp | Giải thích |
-|--------|-----------|------------|
-| DB quá tải khi redirect | **Redis cache** | Lưu link hay dùng vào bộ nhớ tạm. Truy cập nhanh hơn nhiều so với query DB mỗi lần |
-| Query analytics chậm | **Read replicas** | Có thể scale DB phụ để đọc báo cáo, DB chính chỉ lo ghi. Hai việc không chặn nhau |
-| Mất click khi traffic cao | **Message queue** | Gửi tất cả click vào hàng đợi trước, xử lý sau (Job). Không sợ mất dữ liệu khi server bận |
+| Vấn đề | Hướng giải quyết |
+|--------|------------------|
+| DB quá tải redirect | Thêm Redis cache cho hot links |
+| Analytics query chậm | Read replicas, tách đọc/ghi |
+| Mất click data | Message queue buffer, xử lý async |
 
 ## Limitations & Future Improvements
 
