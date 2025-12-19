@@ -381,6 +381,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dto.APIError": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.AnalyticsSummary": {
             "type": "object",
             "properties": {
@@ -448,6 +459,13 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "error": {
+                    "$ref": "#/definitions/dto.APIError"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "timestamp": {
                     "type": "string"
                 }
             }
@@ -544,10 +562,25 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.MessageResponse": {
+        "dto.Message": {
             "type": "object",
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.MessageResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/dto.Message"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "timestamp": {
                     "type": "string"
                 }
             }

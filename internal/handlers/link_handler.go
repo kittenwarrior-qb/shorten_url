@@ -61,7 +61,7 @@ func NewLinkHandler(
 func (h *LinkHandler) Shorten(c *gin.Context) {
 	var req dto.CreateLinkRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		dto.ValidationError(c, err.Error())
 		return
 	}
 
@@ -93,7 +93,7 @@ func (h *LinkHandler) Shorten(c *gin.Context) {
 		guestPass := fmt.Sprintf("guest_%d", time.Now().UnixNano())
 		guestUser, err := h.authService.Register(guestEmail, guestPass, "Guest")
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create guest account"})
+			dto.InternalServerError(c, "failed to create guest account")
 			return
 		}
 		userID = &guestUser.ID
@@ -106,7 +106,7 @@ func (h *LinkHandler) Shorten(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, dto.PublicLinkResponse{
+	dto.Success(c, http.StatusCreated, dto.PublicLinkResponse{
 		Link:  h.toLinkResponse(link),
 		Token: token,
 	})
@@ -131,14 +131,14 @@ func (h *LinkHandler) Redirect(c *gin.Context) {
 	originalURL, err := h.linkService.Redirect(code, clickInfo)
 	if err != nil {
 		if err == service.ErrLinkNotFound {
-			c.JSON(http.StatusNotFound, gin.H{"error": "link not found"})
+			dto.Error(c, http.StatusNotFound, dto.ErrCodeLinkNotFound, "link not found")
 			return
 		}
 		if err == service.ErrLinkExpired {
-			c.JSON(http.StatusGone, gin.H{"error": "link has expired"})
+			dto.Error(c, http.StatusGone, dto.ErrCodeLinkExpired, "link has expired")
 			return
 		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
+		dto.InternalServerError(c, "internal server error")
 		return
 	}
 	c.Redirect(http.StatusMovedPermanently, originalURL)
@@ -158,7 +158,7 @@ func (h *LinkHandler) Redirect(c *gin.Context) {
 func (h *LinkHandler) GetMyLinks(c *gin.Context) {
 	userID, ok := middleware.GetUserID(c)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		dto.Unauthorized(c, "unauthorized")
 		return
 	}
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
@@ -171,14 +171,14 @@ func (h *LinkHandler) GetMyLinks(c *gin.Context) {
 	}
 	links, total, err := h.linkService.GetUserLinks(userID, page, perPage)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch links"})
+		dto.InternalServerError(c, "failed to fetch links")
 		return
 	}
 	linkResponses := make([]dto.LinkResponse, len(links))
 	for i, link := range links {
 		linkResponses[i] = h.toLinkResponse(link)
 	}
-	c.JSON(http.StatusOK, dto.ListLinksResponse{
+	dto.Success(c, http.StatusOK, dto.ListLinksResponse{
 		Links:   linkResponses,
 		Total:   total,
 		Page:    page,
@@ -201,25 +201,25 @@ func (h *LinkHandler) GetMyLinks(c *gin.Context) {
 func (h *LinkHandler) GetMyLinkDetail(c *gin.Context) {
 	userID, ok := middleware.GetUserID(c)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		dto.Unauthorized(c, "unauthorized")
 		return
 	}
 	code := c.Param("code")
 	link, err := h.linkService.GetLinkWithAnalytics(code, userID)
 	if err != nil {
 		if err == service.ErrLinkNotFound {
-			c.JSON(http.StatusNotFound, gin.H{"error": "link not found"})
+			dto.Error(c, http.StatusNotFound, dto.ErrCodeLinkNotFound, "link not found")
 			return
 		}
 		if err == service.ErrUnauthorized {
-			c.JSON(http.StatusForbidden, gin.H{"error": "you don't own this link"})
+			dto.Forbidden(c, "you don't own this link")
 			return
 		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
+		dto.InternalServerError(c, "internal server error")
 		return
 	}
 	analytics, _ := h.analyticsService.GetAnalyticsSummary(link.ID, userID)
-	c.JSON(http.StatusOK, dto.LinkDetailResponse{
+	dto.Success(c, http.StatusOK, dto.LinkDetailResponse{
 		Link:      h.toLinkResponse(link),
 		Analytics: analytics,
 	})
@@ -240,24 +240,24 @@ func (h *LinkHandler) GetMyLinkDetail(c *gin.Context) {
 func (h *LinkHandler) DeleteMyLink(c *gin.Context) {
 	userID, ok := middleware.GetUserID(c)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		dto.Unauthorized(c, "unauthorized")
 		return
 	}
 	code := c.Param("code")
 	err := h.linkService.DeleteLink(code, userID)
 	if err != nil {
 		if err == service.ErrLinkNotFound {
-			c.JSON(http.StatusNotFound, gin.H{"error": "link not found"})
+			dto.Error(c, http.StatusNotFound, dto.ErrCodeLinkNotFound, "link not found")
 			return
 		}
 		if err == service.ErrUnauthorized {
-			c.JSON(http.StatusForbidden, gin.H{"error": "you don't own this link"})
+			dto.Forbidden(c, "you don't own this link")
 			return
 		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
+		dto.InternalServerError(c, "internal server error")
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "link deleted successfully"})
+	dto.Success(c, http.StatusOK, dto.Message{Message: "link deleted successfully"})
 }
 
 func (h *LinkHandler) toLinkResponse(link *models.Link) dto.LinkResponse {
@@ -285,12 +285,12 @@ func (h *LinkHandler) toLinkResponse(link *models.Link) dto.LinkResponse {
 func (h *LinkHandler) handleLinkError(c *gin.Context, err error) {
 	switch err {
 	case service.ErrInvalidURL:
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid URL"})
+		dto.Error(c, http.StatusBadRequest, dto.ErrCodeInvalidURL, "invalid URL")
 	case service.ErrInvalidAlias:
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid alias (3-20 alphanumeric characters)"})
+		dto.Error(c, http.StatusBadRequest, dto.ErrCodeInvalidAlias, "invalid alias (3-20 alphanumeric characters)")
 	case service.ErrAliasAlreadyExists:
-		c.JSON(http.StatusConflict, gin.H{"error": "alias already exists"})
+		dto.Error(c, http.StatusConflict, dto.ErrCodeAliasExists, "alias already exists")
 	default:
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create link"})
+		dto.InternalServerError(c, "failed to create link")
 	}
 }

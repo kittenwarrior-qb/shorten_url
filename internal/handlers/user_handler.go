@@ -32,17 +32,17 @@ func NewUserHandler(userRepo repository.UserRepository) *UserHandler {
 func (h *UserHandler) GetMe(c *gin.Context) {
 	userID, ok := middleware.GetUserID(c)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		dto.Unauthorized(c, "unauthorized")
 		return
 	}
 
 	user, err := h.userRepo.GetByID(userID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "user not found"})
+		dto.NotFound(c, "user not found")
 		return
 	}
 
-	c.JSON(http.StatusOK, dto.UserResponse{
+	dto.Success(c, http.StatusOK, dto.UserResponse{
 		ID:        user.ID,
 		Email:     user.Email,
 		Name:      user.Name,

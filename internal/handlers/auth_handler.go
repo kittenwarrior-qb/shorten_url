@@ -38,21 +38,21 @@ func NewAuthHandler(authService *service.AuthService, jwtSecret string, jwtExpir
 func (h *AuthHandler) Register(c *gin.Context) {
 	var req dto.RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		dto.ValidationError(c, err.Error())
 		return
 	}
 
 	user, err := h.authService.Register(req.Email, req.Password, req.Name)
 	if err != nil {
 		if err == service.ErrEmailAlreadyExists {
-			c.JSON(http.StatusConflict, gin.H{"error": "email already exists"})
+			dto.Error(c, http.StatusConflict, dto.ErrCodeEmailExists, "email already exists")
 			return
 		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to register user"})
+		dto.InternalServerError(c, "failed to register user")
 		return
 	}
 
-	c.JSON(http.StatusCreated, dto.UserResponse{
+	dto.Success(c, http.StatusCreated, dto.UserResponse{
 		ID:        user.ID,
 		Email:     user.Email,
 		Name:      user.Name,
@@ -74,23 +74,23 @@ func (h *AuthHandler) Register(c *gin.Context) {
 func (h *AuthHandler) Login(c *gin.Context) {
 	var req dto.LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		dto.ValidationError(c, err.Error())
 		return
 	}
 
 	user, err := h.authService.Login(req.Email, req.Password)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid credentials"})
+		dto.Error(c, http.StatusUnauthorized, dto.ErrCodeInvalidCredentials, "invalid credentials")
 		return
 	}
 
 	token, err := utils.GenerateToken(user.ID, user.Email, h.jwtSecret, h.jwtExpiry)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate token"})
+		dto.InternalServerError(c, "failed to generate token")
 		return
 	}
 
-	c.JSON(http.StatusOK, dto.LoginResponse{
+	dto.Success(c, http.StatusOK, dto.LoginResponse{
 		Token:     token,
 		ExpiresAt: time.Now().Add(time.Duration(h.jwtExpiry) * time.Hour),
 		User: dto.UserResponse{

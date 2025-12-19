@@ -2,16 +2,6 @@ package dto
 
 import "time"
 
-// ErrorResponse represents an error response
-type ErrorResponse struct {
-	Error string `json:"error"`
-}
-
-// MessageResponse represents a success message response
-type MessageResponse struct {
-	Message string `json:"message"`
-}
-
 // RegisterRequest represents a user registration request
 type RegisterRequest struct {
 	Email    string `json:"email" binding:"required,email" example:"user@gmail.com"`
