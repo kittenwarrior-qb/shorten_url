@@ -20,6 +20,11 @@ func (r *clickRepository) Create(click *models.Click) error {
 	return r.db.Create(click).Error
 }
 
+// CreateWithTx creates a click record within a transaction
+func (r *clickRepository) CreateWithTx(tx *gorm.DB, click *models.Click) error {
+	return tx.Create(click).Error
+}
+
 func (r *clickRepository) GetByLinkID(linkID uint, page, pageSize int) ([]*models.Click, int64, error) {
 	var clicks []*models.Click
 	var total int64

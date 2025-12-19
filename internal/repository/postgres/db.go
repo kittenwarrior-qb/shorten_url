@@ -44,3 +44,20 @@ func AutoMigrate(db *gorm.DB) error {
 	log.Println("Database migrations completed")
 	return nil
 }
+
+// TransactionManager implements repository.TransactionManager
+type TransactionManager struct {
+	db *gorm.DB
+}
+
+// NewTransactionManager creates a new transaction manager
+func NewTransactionManager(db *gorm.DB) *TransactionManager {
+	return &TransactionManager{db: db}
+}
+
+// ExecuteInTransaction runs the given function within a database transaction
+// If the function returns an error, the transaction is rolled back
+// If the function succeeds, the transaction is committed
+func (tm *TransactionManager) ExecuteInTransaction(fn func(tx *gorm.DB) error) error {
+	return tm.db.Transaction(fn)
+}

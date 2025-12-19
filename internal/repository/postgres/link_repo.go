@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 
 	"quocbui.dev/m/internal/models"
 	"quocbui.dev/m/internal/repository"
@@ -21,6 +22,11 @@ func (r *linkRepository) Create(link *models.Link) error {
 	return r.db.Create(link).Error
 }
 
+// CreateWithTx creates a link within a transaction
+func (r *linkRepository) CreateWithTx(tx *gorm.DB, link *models.Link) error {
+	return tx.Create(link).Error
+}
+
 func (r *linkRepository) GetByID(id uint) (*models.Link, error) {
 	var link models.Link
 	err := r.db.First(&link, id).Error
@@ -33,6 +39,18 @@ func (r *linkRepository) GetByID(id uint) (*models.Link, error) {
 func (r *linkRepository) GetByShortCode(shortCode string) (*models.Link, error) {
 	var link models.Link
 	err := r.db.Where("short_code = ?", shortCode).First(&link).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return &link, err
+}
+
+// GetByShortCodeForUpdate gets a link with row-level lock for update (SELECT ... FOR UPDATE)
+func (r *linkRepository) GetByShortCodeForUpdate(tx *gorm.DB, shortCode string) (*models.Link, error) {
+	var link models.Link
+	err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
+		Where("short_code = ?", shortCode).
+		First(&link).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
@@ -61,6 +79,12 @@ func (r *linkRepository) GetByUserID(userID uint, page, pageSize int) ([]*models
 
 func (r *linkRepository) IncrementClickCount(id uint) error {
 	return r.db.Model(&models.Link{}).Where("id = ?", id).
+		UpdateColumn("click_count", gorm.Expr("click_count + ?", 1)).Error
+}
+
+// IncrementClickCountWithTx increments click count within a transaction
+func (r *linkRepository) IncrementClickCountWithTx(tx *gorm.DB, id uint) error {
+	return tx.Model(&models.Link{}).Where("id = ?", id).
 		UpdateColumn("click_count", gorm.Expr("click_count + ?", 1)).Error
 }
 

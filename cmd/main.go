@@ -58,10 +58,13 @@ func main() {
 	linkRepo := postgres.NewLinkRepository(db)
 	clickRepo := postgres.NewClickRepository(db)
 
+	// Initialize transaction manager
+	txManager := postgres.NewTransactionManager(db)
+
 	// Initialize services
 	geoIPService := service.NewGeoIPService()
 	authService := service.NewAuthService(userRepo)
-	linkService := service.NewLinkService(linkRepo, clickRepo, geoIPService)
+	linkService := service.NewLinkService(linkRepo, clickRepo, txManager, geoIPService)
 	analyticsService := service.NewAnalyticsService(clickRepo, linkRepo)
 
 	// Initialize handlers
