@@ -1,0 +1,287 @@
+{"Time":"2025-12-20T19:48:46.4357165+07:00","Action":"start","Package":"quocbui.dev/m/tests/mocks"}
+{"Time":"2025-12-20T19:48:46.4357165+07:00","Action":"output","Package":"quocbui.dev/m/tests/mocks","Output":"?   \tquocbui.dev/m/tests/mocks\t[no test files]\n"}
+{"Time":"2025-12-20T19:48:46.4357165+07:00","Action":"skip","Package":"quocbui.dev/m/tests/mocks","Elapsed":0}
+{"Time":"2025-12-20T19:48:46.9910339+07:00","Action":"start","Package":"quocbui.dev/m/tests/unit/service"}
+{"Time":"2025-12-20T19:48:47.0124933+07:00","Action":"start","Package":"quocbui.dev/m/tests/unit/utils"}
+{"Time":"2025-12-20T19:48:47.1749317+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Register_Success"}
+{"Time":"2025-12-20T19:48:47.1749317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Register_Success","Output":"=== RUN   TestAuthService_Register_Success\n"}
+{"Time":"2025-12-20T19:48:47.700934+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateToken"}
+{"Time":"2025-12-20T19:48:47.700934+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateToken","Output":"=== RUN   TestGenerateToken\n"}
+{"Time":"2025-12-20T19:48:47.7014382+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateToken","Output":"--- PASS: TestGenerateToken (0.00s)\n"}
+{"Time":"2025-12-20T19:48:47.7014382+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateToken","Elapsed":0}
+{"Time":"2025-12-20T19:48:47.7014382+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateToken_Valid"}
+{"Time":"2025-12-20T19:48:47.7014382+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateToken_Valid","Output":"=== RUN   TestValidateToken_Valid\n"}
+{"Time":"2025-12-20T19:48:47.7014382+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateToken_Valid","Output":"--- PASS: TestValidateToken_Valid (0.00s)\n"}
+{"Time":"2025-12-20T19:48:47.7014382+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateToken_Valid","Elapsed":0}
+{"Time":"2025-12-20T19:48:47.7014382+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateToken_InvalidSecret"}
+{"Time":"2025-12-20T19:48:47.7014382+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateToken_InvalidSecret","Output":"=== RUN   TestValidateToken_InvalidSecret\n"}
+{"Time":"2025-12-20T19:48:47.7014382+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateToken_InvalidSecret","Output":"--- PASS: TestValidateToken_InvalidSecret (0.00s)\n"}
+{"Time":"2025-12-20T19:48:47.7014382+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateToken_InvalidSecret","Elapsed":0}
+{"Time":"2025-12-20T19:48:47.7014382+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateToken_ExpiredToken"}
+{"Time":"2025-12-20T19:48:47.7014382+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateToken_ExpiredToken","Output":"=== RUN   TestValidateToken_ExpiredToken\n"}
+{"Time":"2025-12-20T19:48:47.7119299+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateToken_ExpiredToken","Output":"--- PASS: TestValidateToken_ExpiredToken (0.01s)\n"}
+{"Time":"2025-12-20T19:48:47.7119299+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateToken_ExpiredToken","Elapsed":0.01}
+{"Time":"2025-12-20T19:48:47.7119299+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateToken_InvalidToken"}
+{"Time":"2025-12-20T19:48:47.7119299+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateToken_InvalidToken","Output":"=== RUN   TestValidateToken_InvalidToken\n"}
+{"Time":"2025-12-20T19:48:47.7119299+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateToken_InvalidToken","Output":"--- PASS: TestValidateToken_InvalidToken (0.00s)\n"}
+{"Time":"2025-12-20T19:48:47.7119299+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateToken_InvalidToken","Elapsed":0}
+{"Time":"2025-12-20T19:48:47.7119299+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestHashPassword"}
+{"Time":"2025-12-20T19:48:47.7119299+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestHashPassword","Output":"=== RUN   TestHashPassword\n"}
+{"Time":"2025-12-20T19:48:48.4893117+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestHashPassword","Output":"--- PASS: TestHashPassword (0.78s)\n"}
+{"Time":"2025-12-20T19:48:48.4893117+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestHashPassword","Elapsed":0.78}
+{"Time":"2025-12-20T19:48:48.4893117+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestHashPassword_DifferentHashes"}
+{"Time":"2025-12-20T19:48:48.4893117+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestHashPassword_DifferentHashes","Output":"=== RUN   TestHashPassword_DifferentHashes\n"}
+{"Time":"2025-12-20T19:48:48.7386251+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Register_Success","Output":"--- PASS: TestAuthService_Register_Success (1.56s)\n"}
+{"Time":"2025-12-20T19:48:48.7392289+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Register_Success","Elapsed":1.56}
+{"Time":"2025-12-20T19:48:48.7392289+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Register_EmailAlreadyExists"}
+{"Time":"2025-12-20T19:48:48.7392289+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Register_EmailAlreadyExists","Output":"=== RUN   TestAuthService_Register_EmailAlreadyExists\n"}
+{"Time":"2025-12-20T19:48:49.5391134+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Register_EmailAlreadyExists","Output":"--- PASS: TestAuthService_Register_EmailAlreadyExists (0.80s)\n"}
+{"Time":"2025-12-20T19:48:49.5397145+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Register_EmailAlreadyExists","Elapsed":0.8}
+{"Time":"2025-12-20T19:48:49.5397145+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Login_Success"}
+{"Time":"2025-12-20T19:48:49.5397145+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Login_Success","Output":"=== RUN   TestAuthService_Login_Success\n"}
+{"Time":"2025-12-20T19:48:50.0700783+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestHashPassword_DifferentHashes","Output":"--- PASS: TestHashPassword_DifferentHashes (1.58s)\n"}
+{"Time":"2025-12-20T19:48:50.0700783+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestHashPassword_DifferentHashes","Elapsed":1.58}
+{"Time":"2025-12-20T19:48:50.0700783+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestCheckPassword_Valid"}
+{"Time":"2025-12-20T19:48:50.0700783+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestCheckPassword_Valid","Output":"=== RUN   TestCheckPassword_Valid\n"}
+{"Time":"2025-12-20T19:48:51.1008674+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Login_Success","Output":"--- PASS: TestAuthService_Login_Success (1.56s)\n"}
+{"Time":"2025-12-20T19:48:51.1016777+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Login_Success","Elapsed":1.56}
+{"Time":"2025-12-20T19:48:51.1016777+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Login_InvalidEmail"}
+{"Time":"2025-12-20T19:48:51.1016777+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Login_InvalidEmail","Output":"=== RUN   TestAuthService_Login_InvalidEmail\n"}
+{"Time":"2025-12-20T19:48:51.1016777+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Login_InvalidEmail","Output":"--- PASS: TestAuthService_Login_InvalidEmail (0.00s)\n"}
+{"Time":"2025-12-20T19:48:51.1016777+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Login_InvalidEmail","Elapsed":0}
+{"Time":"2025-12-20T19:48:51.1016777+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Login_InvalidPassword"}
+{"Time":"2025-12-20T19:48:51.1016777+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Login_InvalidPassword","Output":"=== RUN   TestAuthService_Login_InvalidPassword\n"}
+{"Time":"2025-12-20T19:48:51.6136439+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestCheckPassword_Valid","Output":"--- PASS: TestCheckPassword_Valid (1.54s)\n"}
+{"Time":"2025-12-20T19:48:51.6140156+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestCheckPassword_Valid","Elapsed":1.54}
+{"Time":"2025-12-20T19:48:51.6140156+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestCheckPassword_Invalid"}
+{"Time":"2025-12-20T19:48:51.6140156+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestCheckPassword_Invalid","Output":"=== RUN   TestCheckPassword_Invalid\n"}
+{"Time":"2025-12-20T19:48:52.666007+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Login_InvalidPassword","Output":"--- PASS: TestAuthService_Login_InvalidPassword (1.57s)\n"}
+{"Time":"2025-12-20T19:48:52.666007+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Login_InvalidPassword","Elapsed":1.57}
+{"Time":"2025-12-20T19:48:52.6671556+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Register_AssignsUserID"}
+{"Time":"2025-12-20T19:48:52.6671556+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Register_AssignsUserID","Output":"=== RUN   TestAuthService_Register_AssignsUserID\n"}
+{"Time":"2025-12-20T19:48:53.1795455+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestCheckPassword_Invalid","Output":"--- PASS: TestCheckPassword_Invalid (1.57s)\n"}
+{"Time":"2025-12-20T19:48:53.1795455+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestCheckPassword_Invalid","Elapsed":1.57}
+{"Time":"2025-12-20T19:48:53.1795455+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestCheckPassword_EmptyPassword"}
+{"Time":"2025-12-20T19:48:53.1795455+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestCheckPassword_EmptyPassword","Output":"=== RUN   TestCheckPassword_EmptyPassword\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Register_AssignsUserID","Output":"--- PASS: TestAuthService_Register_AssignsUserID (0.77s)\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestAuthService_Register_AssignsUserID","Elapsed":0.77}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_Success"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_Success","Output":"=== RUN   TestLinkService_CreateLink_Success\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_Success","Output":"--- PASS: TestLinkService_CreateLink_Success (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_Success","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_WithCustomAlias"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_WithCustomAlias","Output":"=== RUN   TestLinkService_CreateLink_WithCustomAlias\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_WithCustomAlias","Output":"--- PASS: TestLinkService_CreateLink_WithCustomAlias (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_WithCustomAlias","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_InvalidURL"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_InvalidURL","Output":"=== RUN   TestLinkService_CreateLink_InvalidURL\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_InvalidURL","Output":"--- PASS: TestLinkService_CreateLink_InvalidURL (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_InvalidURL","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_InvalidAlias"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_InvalidAlias","Output":"=== RUN   TestLinkService_CreateLink_InvalidAlias\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_InvalidAlias","Output":"--- PASS: TestLinkService_CreateLink_InvalidAlias (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_InvalidAlias","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_DuplicateAlias"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_DuplicateAlias","Output":"=== RUN   TestLinkService_CreateLink_DuplicateAlias\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_DuplicateAlias","Output":"--- PASS: TestLinkService_CreateLink_DuplicateAlias (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_DuplicateAlias","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_WithExpiration"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_WithExpiration","Output":"=== RUN   TestLinkService_CreateLink_WithExpiration\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_WithExpiration","Output":"--- PASS: TestLinkService_CreateLink_WithExpiration (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_CreateLink_WithExpiration","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_Redirect_Success"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_Redirect_Success","Output":"=== RUN   TestLinkService_Redirect_Success\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_Redirect_Success","Output":"--- PASS: TestLinkService_Redirect_Success (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_Redirect_Success","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_Redirect_NotFound"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_Redirect_NotFound","Output":"=== RUN   TestLinkService_Redirect_NotFound\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_Redirect_NotFound","Output":"--- PASS: TestLinkService_Redirect_NotFound (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_Redirect_NotFound","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_Redirect_Expired"}
+{"Time":"2025-12-20T19:48:53.4386183+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_Redirect_Expired","Output":"=== RUN   TestLinkService_Redirect_Expired\n"}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_Redirect_Expired","Output":"--- PASS: TestLinkService_Redirect_Expired (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_Redirect_Expired","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetUserLinks_Success"}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetUserLinks_Success","Output":"=== RUN   TestLinkService_GetUserLinks_Success\n"}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetUserLinks_Success","Output":"--- PASS: TestLinkService_GetUserLinks_Success (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetUserLinks_Success","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetUserLinks_Empty"}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetUserLinks_Empty","Output":"=== RUN   TestLinkService_GetUserLinks_Empty\n"}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetUserLinks_Empty","Output":"--- PASS: TestLinkService_GetUserLinks_Empty (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetUserLinks_Empty","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetLinkWithAnalytics_Success"}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetLinkWithAnalytics_Success","Output":"=== RUN   TestLinkService_GetLinkWithAnalytics_Success\n"}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetLinkWithAnalytics_Success","Output":"--- PASS: TestLinkService_GetLinkWithAnalytics_Success (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetLinkWithAnalytics_Success","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetLinkWithAnalytics_NotFound"}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetLinkWithAnalytics_NotFound","Output":"=== RUN   TestLinkService_GetLinkWithAnalytics_NotFound\n"}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetLinkWithAnalytics_NotFound","Output":"--- PASS: TestLinkService_GetLinkWithAnalytics_NotFound (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetLinkWithAnalytics_NotFound","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetLinkWithAnalytics_Unauthorized"}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetLinkWithAnalytics_Unauthorized","Output":"=== RUN   TestLinkService_GetLinkWithAnalytics_Unauthorized\n"}
+{"Time":"2025-12-20T19:48:53.4391243+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetLinkWithAnalytics_Unauthorized","Output":"--- PASS: TestLinkService_GetLinkWithAnalytics_Unauthorized (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4401675+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_GetLinkWithAnalytics_Unauthorized","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4401675+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_DeleteLink_Success"}
+{"Time":"2025-12-20T19:48:53.4401675+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_DeleteLink_Success","Output":"=== RUN   TestLinkService_DeleteLink_Success\n"}
+{"Time":"2025-12-20T19:48:53.4401675+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_DeleteLink_Success","Output":"--- PASS: TestLinkService_DeleteLink_Success (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4401675+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_DeleteLink_Success","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4401675+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_DeleteLink_NotFound"}
+{"Time":"2025-12-20T19:48:53.4401675+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_DeleteLink_NotFound","Output":"=== RUN   TestLinkService_DeleteLink_NotFound\n"}
+{"Time":"2025-12-20T19:48:53.4401675+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_DeleteLink_NotFound","Output":"--- PASS: TestLinkService_DeleteLink_NotFound (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4401675+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_DeleteLink_NotFound","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4401675+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_DeleteLink_Unauthorized"}
+{"Time":"2025-12-20T19:48:53.4401675+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_DeleteLink_Unauthorized","Output":"=== RUN   TestLinkService_DeleteLink_Unauthorized\n"}
+{"Time":"2025-12-20T19:48:53.4401675+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_DeleteLink_Unauthorized","Output":"--- PASS: TestLinkService_DeleteLink_Unauthorized (0.00s)\n"}
+{"Time":"2025-12-20T19:48:53.4401675+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Test":"TestLinkService_DeleteLink_Unauthorized","Elapsed":0}
+{"Time":"2025-12-20T19:48:53.4401675+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Output":"PASS\n"}
+{"Time":"2025-12-20T19:48:53.4412176+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/service","Output":"ok  \tquocbui.dev/m/tests/unit/service\t6.450s\n"}
+{"Time":"2025-12-20T19:48:53.4796701+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/service","Elapsed":6.489}
+{"Time":"2025-12-20T19:48:54.7046536+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestCheckPassword_EmptyPassword","Output":"--- PASS: TestCheckPassword_EmptyPassword (1.53s)\n"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestCheckPassword_EmptyPassword","Elapsed":1.53}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode","Output":"=== RUN   TestGenerateShortCode\n"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode/length_6"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode/length_6","Output":"=== RUN   TestGenerateShortCode/length_6\n"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode/length_6","Output":"--- PASS: TestGenerateShortCode/length_6 (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode/length_6","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode/length_8"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode/length_8","Output":"=== RUN   TestGenerateShortCode/length_8\n"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode/length_8","Output":"--- PASS: TestGenerateShortCode/length_8 (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode/length_8","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode/length_10"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode/length_10","Output":"=== RUN   TestGenerateShortCode/length_10\n"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode/length_10","Output":"--- PASS: TestGenerateShortCode/length_10 (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode/length_10","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode","Output":"--- PASS: TestGenerateShortCode (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode_CharsetOnly"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode_CharsetOnly","Output":"=== RUN   TestGenerateShortCode_CharsetOnly\n"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode_CharsetOnly","Output":"--- PASS: TestGenerateShortCode_CharsetOnly (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode_CharsetOnly","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode_Uniqueness"}
+{"Time":"2025-12-20T19:48:54.7055874+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode_Uniqueness","Output":"=== RUN   TestGenerateShortCode_Uniqueness\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode_Uniqueness","Output":"--- PASS: TestGenerateShortCode_Uniqueness (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestGenerateShortCode_Uniqueness","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL","Output":"=== RUN   TestValidateURL\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_http_url"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_http_url","Output":"=== RUN   TestValidateURL/valid_http_url\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_http_url","Output":"--- PASS: TestValidateURL/valid_http_url (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_http_url","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_https_url"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_https_url","Output":"=== RUN   TestValidateURL/valid_https_url\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_https_url","Output":"--- PASS: TestValidateURL/valid_https_url (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_https_url","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_url_with_path"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_url_with_path","Output":"=== RUN   TestValidateURL/valid_url_with_path\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_url_with_path","Output":"--- PASS: TestValidateURL/valid_url_with_path (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_url_with_path","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_url_with_query_params"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_url_with_query_params","Output":"=== RUN   TestValidateURL/valid_url_with_query_params\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_url_with_query_params","Output":"--- PASS: TestValidateURL/valid_url_with_query_params (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_url_with_query_params","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_url_with_port"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_url_with_port","Output":"=== RUN   TestValidateURL/valid_url_with_port\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_url_with_port","Output":"--- PASS: TestValidateURL/valid_url_with_port (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_url_with_port","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_url_with_subdomain"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_url_with_subdomain","Output":"=== RUN   TestValidateURL/valid_url_with_subdomain\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_url_with_subdomain","Output":"--- PASS: TestValidateURL/valid_url_with_subdomain (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/valid_url_with_subdomain","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/empty_string"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/empty_string","Output":"=== RUN   TestValidateURL/empty_string\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/empty_string","Output":"--- PASS: TestValidateURL/empty_string (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/empty_string","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/whitespace_only"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/whitespace_only","Output":"=== RUN   TestValidateURL/whitespace_only\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/whitespace_only","Output":"--- PASS: TestValidateURL/whitespace_only (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/whitespace_only","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/no_scheme"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/no_scheme","Output":"=== RUN   TestValidateURL/no_scheme\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/no_scheme","Output":"--- PASS: TestValidateURL/no_scheme (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/no_scheme","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/ftp_scheme"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/ftp_scheme","Output":"=== RUN   TestValidateURL/ftp_scheme\n"}
+{"Time":"2025-12-20T19:48:54.7066317+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/ftp_scheme","Output":"--- PASS: TestValidateURL/ftp_scheme (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/ftp_scheme","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/javascript_scheme"}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/javascript_scheme","Output":"=== RUN   TestValidateURL/javascript_scheme\n"}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/javascript_scheme","Output":"--- PASS: TestValidateURL/javascript_scheme (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/javascript_scheme","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/no_host"}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/no_host","Output":"=== RUN   TestValidateURL/no_host\n"}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/no_host","Output":"--- PASS: TestValidateURL/no_host (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/no_host","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/invalid_url"}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/invalid_url","Output":"=== RUN   TestValidateURL/invalid_url\n"}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/invalid_url","Output":"--- PASS: TestValidateURL/invalid_url (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL/invalid_url","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL","Output":"--- PASS: TestValidateURL (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL_MaxLength"}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL_MaxLength","Output":"=== RUN   TestValidateURL_MaxLength\n"}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL_MaxLength","Output":"--- PASS: TestValidateURL_MaxLength (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateURL_MaxLength","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias"}
+{"Time":"2025-12-20T19:48:54.7071506+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias","Output":"=== RUN   TestValidateAlias\n"}
+{"Time":"2025-12-20T19:48:54.7076749+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_lowercase"}
+{"Time":"2025-12-20T19:48:54.7076749+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_lowercase","Output":"=== RUN   TestValidateAlias/valid_lowercase\n"}
+{"Time":"2025-12-20T19:48:54.7076749+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_lowercase","Output":"--- PASS: TestValidateAlias/valid_lowercase (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_lowercase","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_uppercase"}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_uppercase","Output":"=== RUN   TestValidateAlias/valid_uppercase\n"}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_uppercase","Output":"--- PASS: TestValidateAlias/valid_uppercase (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_uppercase","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_mixed_case"}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_mixed_case","Output":"=== RUN   TestValidateAlias/valid_mixed_case\n"}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_mixed_case","Output":"--- PASS: TestValidateAlias/valid_mixed_case (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_mixed_case","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_with_numbers"}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_with_numbers","Output":"=== RUN   TestValidateAlias/valid_with_numbers\n"}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_with_numbers","Output":"--- PASS: TestValidateAlias/valid_with_numbers (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_with_numbers","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_with_underscore"}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_with_underscore","Output":"=== RUN   TestValidateAlias/valid_with_underscore\n"}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_with_underscore","Output":"--- PASS: TestValidateAlias/valid_with_underscore (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_with_underscore","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_with_hyphen"}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_with_hyphen","Output":"=== RUN   TestValidateAlias/valid_with_hyphen\n"}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_with_hyphen","Output":"--- PASS: TestValidateAlias/valid_with_hyphen (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_with_hyphen","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.708192+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_min_length_(3)"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_min_length_(3)","Output":"=== RUN   TestValidateAlias/valid_min_length_(3)\n"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_min_length_(3)","Output":"--- PASS: TestValidateAlias/valid_min_length_(3) (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_min_length_(3)","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_max_length_(20)"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_max_length_(20)","Output":"=== RUN   TestValidateAlias/valid_max_length_(20)\n"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_max_length_(20)","Output":"--- PASS: TestValidateAlias/valid_max_length_(20) (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/valid_max_length_(20)","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/empty_string"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/empty_string","Output":"=== RUN   TestValidateAlias/empty_string\n"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/empty_string","Output":"--- PASS: TestValidateAlias/empty_string (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/empty_string","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/too_short_(2)"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/too_short_(2)","Output":"=== RUN   TestValidateAlias/too_short_(2)\n"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/too_short_(2)","Output":"--- PASS: TestValidateAlias/too_short_(2) (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/too_short_(2)","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/too_long_(21)"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/too_long_(21)","Output":"=== RUN   TestValidateAlias/too_long_(21)\n"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/too_long_(21)","Output":"--- PASS: TestValidateAlias/too_long_(21) (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/too_long_(21)","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/contains_space"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/contains_space","Output":"=== RUN   TestValidateAlias/contains_space\n"}
+{"Time":"2025-12-20T19:48:54.7087097+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/contains_space","Output":"--- PASS: TestValidateAlias/contains_space (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7092379+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/contains_space","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7092379+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/contains_special_char"}
+{"Time":"2025-12-20T19:48:54.7092379+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/contains_special_char","Output":"=== RUN   TestValidateAlias/contains_special_char\n"}
+{"Time":"2025-12-20T19:48:54.7092379+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/contains_special_char","Output":"--- PASS: TestValidateAlias/contains_special_char (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7092379+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/contains_special_char","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7092379+07:00","Action":"run","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/contains_dot"}
+{"Time":"2025-12-20T19:48:54.7092379+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/contains_dot","Output":"=== RUN   TestValidateAlias/contains_dot\n"}
+{"Time":"2025-12-20T19:48:54.7092379+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/contains_dot","Output":"--- PASS: TestValidateAlias/contains_dot (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7092379+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias/contains_dot","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7092379+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias","Output":"--- PASS: TestValidateAlias (0.00s)\n"}
+{"Time":"2025-12-20T19:48:54.7092379+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Test":"TestValidateAlias","Elapsed":0}
+{"Time":"2025-12-20T19:48:54.7092379+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Output":"PASS\n"}
+{"Time":"2025-12-20T19:48:54.7092379+07:00","Action":"output","Package":"quocbui.dev/m/tests/unit/utils","Output":"ok  \tquocbui.dev/m/tests/unit/utils\t7.697s\n"}
+{"Time":"2025-12-20T19:48:54.7463239+07:00","Action":"pass","Package":"quocbui.dev/m/tests/unit/utils","Elapsed":7.734}
