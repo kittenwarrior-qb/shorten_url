@@ -14,8 +14,10 @@ func setupLinkService() (*service.LinkService, *mocks.MockLinkRepository, *mocks
 	clickRepo := mocks.NewMockClickRepository()
 	txManager := mocks.NewMockTransactionManager()
 	geoIP := service.NewGeoIPService()
+	userRepo := mocks.NewMockUserRepository()
+	authService := service.NewAuthService(userRepo, "test-secret", 24)
 
-	svc := service.NewLinkService(linkRepo, clickRepo, txManager, geoIP)
+	svc := service.NewLinkService(linkRepo, clickRepo, txManager, geoIP, authService)
 	return svc, linkRepo, clickRepo
 }
 

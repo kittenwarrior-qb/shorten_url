@@ -1,6 +1,9 @@
 package service
 
 import (
+	"fmt"
+	"time"
+
 	"quocbui.dev/m/internal/models"
 	"quocbui.dev/m/internal/repository"
 	"quocbui.dev/m/pkg/utils"
@@ -8,13 +11,17 @@ import (
 
 // AuthService handles authentication logic
 type AuthService struct {
-	userRepo repository.UserRepository
+	userRepo  repository.UserRepository
+	jwtSecret string
+	jwtExpiry int
 }
 
 // NewAuthService creates a new auth service
-func NewAuthService(userRepo repository.UserRepository) *AuthService {
+func NewAuthService(userRepo repository.UserRepository, jwtSecret string, jwtExpiry int) *AuthService {
 	return &AuthService{
-		userRepo: userRepo,
+		userRepo:  userRepo,
+		jwtSecret: jwtSecret,
+		jwtExpiry: jwtExpiry,
 	}
 }
 
@@ -58,4 +65,66 @@ func (s *AuthService) Login(email, password string) (*models.User, error) {
 	}
 
 	return user, nil
+}
+
+// LoginWithToken authenticates a user and returns user with JWT token
+func (s *AuthService) LoginWithToken(email, password string) (*models.User, string, error) {
+	user, err := s.Login(email, password)
+	if err != nil {
+		return nil, "", err
+	}
+
+	token, err := utils.GenerateToken(user.ID, user.Email, s.jwtSecret, s.jwtExpiry)
+	if err != nil {
+		return nil, "", err
+	}
+
+	return user, token, nil
+}
+
+// ValidateToken validates JWT token and returns user ID
+func (s *AuthService) ValidateToken(tokenString string) (uint, error) {
+	claims, err := utils.ValidateToken(tokenString, s.jwtSecret)
+	if err != nil {
+		return 0, ErrInvalidToken
+	}
+	return claims.UserID, nil
+}
+
+// CreateGuestUser creates a temporary guest user account
+func (s *AuthService) CreateGuestUser() (*models.User, string, error) {
+	guestEmail := fmt.Sprintf("guest_%d@temp.local", time.Now().UnixNano())
+	guestPass := fmt.Sprintf("guest_%d", time.Now().UnixNano())
+
+	user, err := s.Register(guestEmail, guestPass, "Guest")
+	if err != nil {
+		return nil, "", err
+	}
+
+	token, err := utils.GenerateToken(user.ID, user.Email, s.jwtSecret, s.jwtExpiry)
+	if err != nil {
+		return nil, "", err
+	}
+
+	return user, token, nil
+}
+
+// GetUserFromToken extracts and validates user from authorization header
+func (s *AuthService) GetUserFromToken(authHeader string) (*uint, error) {
+	if authHeader == "" {
+		return nil, nil
+	}
+
+	// Remove "Bearer " prefix if present
+	tokenString := authHeader
+	if len(authHeader) > 7 && authHeader[:7] == "Bearer " {
+		tokenString = authHeader[7:]
+	}
+
+	userID, err := s.ValidateToken(tokenString)
+	if err != nil {
+		return nil, err
+	}
+
+	return &userID, nil
 }
