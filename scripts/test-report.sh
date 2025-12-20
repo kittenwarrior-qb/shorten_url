@@ -14,182 +14,139 @@ echo -e "${CYAN}  Running All Tests with Coverage...${NC}"
 echo -e "${CYAN}==========================================${NC}"
 echo ""
 
-# Create temp directory
-TEMP_DIR="/tmp/test-results-$$"
-mkdir -p "$TEMP_DIR"
+# Run all tests
+echo -e "${GREEN}Running Unit Tests...${NC}"
+echo -e "${GRAY}-------------------------------------------${NC}"
 
-# Function to run tests for a category
-run_test_category() {
-    local category=$1
-    local path=$2
-    local color=$3
-    
-    echo ""
-    echo -e "${color}Running $category Tests...${NC}"
-    echo -e "${GRAY}-------------------------------------------${NC}"
-    
-    local json_file="$TEMP_DIR/$category.json"
-    local start_time=$(date +%s)
-    
-    # Check if path exists
-    local test_path="${path//\/\.\.\./}"
-    if [ ! -d "$test_path" ]; then
-        echo -e "${GRAY}  No tests found (path doesn't exist)${NC}"
-        echo "0|0|0|0|0|N/A|0"
-        return
-    fi
-    
-    # Run tests and capture output
-    local output_file="$TEMP_DIR/$category-output.txt"
-    gotestsum --format dots-v2 --jsonfile "$json_file" -- -cover "$path" > "$output_file" 2>&1
-    local exit_code=$?
-    
-    local end_time=$(date +%s)
-    local duration=$((end_time - start_time))
-    
-    # Parse results
-    if [ -f "$json_file" ]; then
-        local passed=$(grep '"Action":"pass"' "$json_file" | grep '"Test":' | wc -l | tr -d ' ')
-        local failed=$(grep '"Action":"fail"' "$json_file" | grep '"Test":' | wc -l | tr -d ' ')
-        local skipped=$(grep '"Action":"skip"' "$json_file" | grep '"Test":' | wc -l | tr -d ' ')
-        
-        # Default to 0 if empty
-        passed=${passed:-0}
-        failed=${failed:-0}
-        skipped=${skipped:-0}
-        
-        local total=$((passed + failed + skipped))
-        
-        # Extract coverage from output
-        local coverage="N/A"
-        if [ -f "$output_file" ]; then
-            coverage=$(grep -o 'coverage: [0-9.]*%' "$output_file" | tail -1 | grep -o '[0-9.]*' || echo "N/A")
-        fi
-        
-        echo "$passed|$failed|$skipped|$total|$duration|$coverage|$exit_code"
-    else
-        echo "0|0|0|0|$duration|N/A|$exit_code"
-    fi
-}
+# Run tests and capture output
+TEST_OUTPUT=$(go test -v -cover ./tests/unit/... 2>&1)
+EXIT_CODE=$?
 
-# Run different test categories
-unit_result=$(run_test_category "Unit" "./tests/unit/..." "$GREEN")
-integration_result=$(run_test_category "Integration" "./tests/integration/..." "$YELLOW")
-api_result=$(run_test_category "API" "./tests/api/..." "\033[0;35m")
+# Count results
+PASSED=$(echo "$TEST_OUTPUT" | grep -c "^--- PASS:" || echo 0)
+FAILED=$(echo "$TEST_OUTPUT" | grep -c "^--- FAIL:" || echo 0)
+TOTAL=$((PASSED + FAILED))
 
-# Parse results
-IFS='|' read -r unit_passed unit_failed unit_skipped unit_total unit_duration unit_coverage unit_exit <<< "$unit_result"
-IFS='|' read -r int_passed int_failed int_skipped int_total int_duration int_coverage int_exit <<< "$integration_result"
-IFS='|' read -r api_passed api_failed api_skipped api_total api_duration api_coverage api_exit <<< "$api_result"
+# Extract coverage
+COVERAGE=$(echo "$TEST_OUTPUT" | grep -o 'coverage: [0-9.]*%' | tail -1 | grep -o '[0-9.]*' || echo "N/A")
 
-# Default to 0 if empty
-unit_passed=${unit_passed:-0}
-unit_failed=${unit_failed:-0}
-unit_skipped=${unit_skipped:-0}
-unit_total=${unit_total:-0}
-unit_duration=${unit_duration:-0}
-
-int_passed=${int_passed:-0}
-int_failed=${int_failed:-0}
-int_skipped=${int_skipped:-0}
-int_total=${int_total:-0}
-int_duration=${int_duration:-0}
-
-api_passed=${api_passed:-0}
-api_failed=${api_failed:-0}
-api_skipped=${api_skipped:-0}
-api_total=${api_total:-0}
-api_duration=${api_duration:-0}
-
-# Calculate totals
-total_passed=$((unit_passed + int_passed + api_passed))
-total_failed=$((unit_failed + int_failed + api_failed))
-total_skipped=$((unit_skipped + int_skipped + api_skipped))
-total_tests=$((total_passed + total_failed + total_skipped))
-total_duration=$((unit_duration + int_duration + api_duration))
-
-# Print detailed summary
+# Print summary
 echo ""
 echo -e "${CYAN}==========================================${NC}"
 echo -e "${CYAN}           Test Summary Report${NC}"
 echo -e "${CYAN}==========================================${NC}"
 echo ""
 
-echo -e "${NC}By Category:${NC}"
-echo ""
+if [ "$TOTAL" -gt 0 ]; then
+    STATUS_COLOR=$GREEN
+    STATUS="PASSED"
+    if [ "$FAILED" -gt 0 ]; then
+        STATUS_COLOR=$RED
+        STATUS="FAILED"
+    fi
+    
+    echo -e "  ${NC}Unit Tests:${NC}"
+    echo -e "    Status:   ${STATUS_COLOR}$STATUS${NC}"
+    echo -e "    Total:    ${GRAY}$TOTAL tests${NC}"
+    echo -e "    Passed:   ${GREEN}$PASSED${NC}"
+    echo -e "    Failed:   ${RED}$FAILED${NC}"
+    echo -e "    Coverage: ${CYAN}$COVERAGE%${NC}"
+    echo ""
+fi
 
-# Print category results
-print_category() {
-    local category=$1
-    local passed=$2
-    local failed=$3
-    local skipped=$4
-    local total=$5
-    local duration=$6
-    local coverage=$7
+# Check for integration tests
+if [ -d "./tests/integration" ]; then
+    echo -e "${YELLOW}Running Integration Tests...${NC}"
+    echo -e "${GRAY}-------------------------------------------${NC}"
     
-    # Convert to numbers
-    passed=${passed:-0}
-    failed=${failed:-0}
-    skipped=${skipped:-0}
-    total=${total:-0}
+    INT_OUTPUT=$(go test -v -cover ./tests/integration/... 2>&1)
+    INT_EXIT=$?
     
-    if [ "$total" -gt 0 ]; then
-        local status_color=$GREEN
-        local status="PASSED"
-        if [ "$failed" -gt 0 ]; then
-            status_color=$RED
-            status="FAILED"
+    INT_PASSED=$(echo "$INT_OUTPUT" | grep -c "^--- PASS:" || echo 0)
+    INT_FAILED=$(echo "$INT_OUTPUT" | grep -c "^--- FAIL:" || echo 0)
+    INT_TOTAL=$((INT_PASSED + INT_FAILED))
+    
+    if [ "$INT_TOTAL" -gt 0 ]; then
+        INT_STATUS_COLOR=$GREEN
+        INT_STATUS="PASSED"
+        if [ "$INT_FAILED" -gt 0 ]; then
+            INT_STATUS_COLOR=$RED
+            INT_STATUS="FAILED"
         fi
         
-        echo -e "  ${NC}$category Tests:${NC}"
-        echo -e "    Status:   ${status_color}$status${NC}"
-        echo -e "    Total:    ${GRAY}$total tests${NC}"
-        echo -e "    Passed:   ${GREEN}$passed${NC}"
-        echo -e "    Failed:   ${RED}$failed${NC}"
-        echo -e "    Skipped:  ${YELLOW}$skipped${NC}"
-        echo -e "    Coverage: ${CYAN}$coverage%${NC}"
-        echo -e "    Duration: ${GRAY}${duration}s${NC}"
+        echo -e "  ${NC}Integration Tests:${NC}"
+        echo -e "    Status:   ${INT_STATUS_COLOR}$INT_STATUS${NC}"
+        echo -e "    Total:    ${GRAY}$INT_TOTAL tests${NC}"
+        echo -e "    Passed:   ${GREEN}$INT_PASSED${NC}"
+        echo -e "    Failed:   ${RED}$INT_FAILED${NC}"
         echo ""
+        
+        TOTAL=$((TOTAL + INT_TOTAL))
+        PASSED=$((PASSED + INT_PASSED))
+        FAILED=$((FAILED + INT_FAILED))
     fi
-}
+fi
 
-print_category "Unit" "$unit_passed" "$unit_failed" "$unit_skipped" "$unit_total" "$unit_duration" "$unit_coverage"
-print_category "Integration" "$int_passed" "$int_failed" "$int_skipped" "$int_total" "$int_duration" "$int_coverage"
-print_category "API" "$api_passed" "$api_failed" "$api_skipped" "$api_total" "$api_duration" "$api_coverage"
+# Check for API tests
+if [ -d "./tests/api" ]; then
+    echo -e "\033[0;35mRunning API Tests...${NC}"
+    echo -e "${GRAY}-------------------------------------------${NC}"
+    
+    API_OUTPUT=$(go test -v -cover ./tests/api/... 2>&1)
+    API_EXIT=$?
+    
+    API_PASSED=$(echo "$API_OUTPUT" | grep -c "^--- PASS:" || echo 0)
+    API_FAILED=$(echo "$API_OUTPUT" | grep -c "^--- FAIL:" || echo 0)
+    API_TOTAL=$((API_PASSED + API_FAILED))
+    
+    if [ "$API_TOTAL" -gt 0 ]; then
+        API_STATUS_COLOR=$GREEN
+        API_STATUS="PASSED"
+        if [ "$API_FAILED" -gt 0 ]; then
+            API_STATUS_COLOR=$RED
+            API_STATUS="FAILED"
+        fi
+        
+        echo -e "  ${NC}API Tests:${NC}"
+        echo -e "    Status:   ${API_STATUS_COLOR}$API_STATUS${NC}"
+        echo -e "    Total:    ${GRAY}$API_TOTAL tests${NC}"
+        echo -e "    Passed:   ${GREEN}$API_PASSED${NC}"
+        echo -e "    Failed:   ${RED}$API_FAILED${NC}"
+        echo ""
+        
+        TOTAL=$((TOTAL + API_TOTAL))
+        PASSED=$((PASSED + API_PASSED))
+        FAILED=$((FAILED + API_FAILED))
+    fi
+fi
 
 # Overall summary
 echo -e "${GRAY}-------------------------------------------${NC}"
 echo -e "${NC}Overall Results:${NC}"
 echo ""
-echo -e "  Total Tests:  ${NC}$total_tests${NC}"
-echo -e "  Passed:       ${GREEN}$total_passed${NC}"
-echo -e "  Failed:       ${RED}$total_failed${NC}"
-echo -e "  Skipped:      ${YELLOW}$total_skipped${NC}"
-echo -e "  Duration:     ${GRAY}${total_duration}s${NC}"
+echo -e "  Total Tests:  ${NC}$TOTAL${NC}"
+echo -e "  Passed:       ${GREEN}$PASSED${NC}"
+echo -e "  Failed:       ${RED}$FAILED${NC}"
 echo ""
 
 # Pass rate
-if [ "$total_tests" -gt 0 ]; then
-    pass_rate=$((total_passed * 100 / total_tests))
-    pass_rate_color=$GREEN
-    if [ "$pass_rate" -lt 90 ]; then
-        pass_rate_color=$YELLOW
+if [ "$TOTAL" -gt 0 ]; then
+    PASS_RATE=$((PASSED * 100 / TOTAL))
+    PASS_RATE_COLOR=$GREEN
+    if [ "$PASS_RATE" -lt 90 ]; then
+        PASS_RATE_COLOR=$YELLOW
     fi
-    if [ "$pass_rate" -lt 70 ]; then
-        pass_rate_color=$RED
+    if [ "$PASS_RATE" -lt 70 ]; then
+        PASS_RATE_COLOR=$RED
     fi
-    echo -e "  Pass Rate:    ${pass_rate_color}${pass_rate}%${NC}"
+    echo -e "  Pass Rate:    ${PASS_RATE_COLOR}${PASS_RATE}%${NC}"
 fi
 
 echo ""
 echo -e "${CYAN}==========================================${NC}"
 
-# Cleanup
-rm -rf "$TEMP_DIR"
-
 # Exit with error if any tests failed
-if [ "$total_failed" -gt 0 ]; then
+if [ "$FAILED" -gt 0 ]; then
     echo ""
     echo -e "${RED}Tests FAILED!${NC}"
     exit 1
