@@ -2,7 +2,9 @@
 
 Backend Service rút gọn link tương tự bit.ly, tinyurl - Golang.
 
-**Live Demo:** https://shorten.quocbui.dev/swagger/index.html
+**Live Demo:** 
+- API: https://shorten.quocbui.dev/swagger/index.html
+- Frontend: https://shorten-url-xi.vercel.app/
 
 ## Mô tả bài toán
 
@@ -25,6 +27,7 @@ Output: https://shorten.quocbui.dev/abc123
 - Swagger API docs
 - Unit tests với coverage report
 - CI/CD pipeline VPS với GitHub Actions
+- Deploy: đã deploy lên VPS và Vercel
 
 ## Tech Stack
 
@@ -242,3 +245,4 @@ Facebook, Instagram và nhiều social platforms set `Referrer-Policy: no-referr
 ![Links Code Response](assets/readme/links-code-response.png)
 ![Links Code Response](assets/readme/ci-test.png)
 ![Links Code Response](assets/readme/github-action.png)
+![Links Code Response](assets/readme/simple-frontend.png)
