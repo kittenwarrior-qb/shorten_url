@@ -13,9 +13,9 @@ Input:  https://example.com/very/long/path?param1=value1&param2=value2
 Output: https://shorten.quocbui.dev/abc123
 ```
 
-## Tính năng
+## Tính năng đã có
 
-- Tạo link rút gọn (có/không đăng nhập)
+- Tạo link rút gọn (đăng nhập/không đăng nhập)
 - Custom alias (vd: `/my-link`)
 - Link expiration
 - Analytics: click count, browser, OS, device, country
@@ -24,7 +24,7 @@ Output: https://shorten.quocbui.dev/abc123
 - JWT Authentication
 - Swagger API docs
 - Unit tests với coverage report
-- CI/CD pipeline với GitHub Actions
+- CI/CD pipeline VPS với GitHub Actions
 
 ## Tech Stack
 
@@ -230,8 +230,8 @@ Facebook, Instagram và nhiều social platforms set `Referrer-Policy: no-referr
 - Phân quyền
 
 ### Production-ready cần thêm
+- Integration, automation, e2e tests
 - Distributed rate limiting scale lên Redis
-- Integration tests và CI/CD actions
 - Metrics & monitoring 
 - Structured logging 
 - Database backup 
@@ -240,4 +240,5 @@ Facebook, Instagram và nhiều social platforms set `Referrer-Policy: no-referr
 ## Screenshots
 
 ![Links Code Response](assets/readme/links-code-response.png)
+![Links Code Response](assets/readme/ci-test.png)
 ![Links Code Response](assets/readme/github-action.png)
