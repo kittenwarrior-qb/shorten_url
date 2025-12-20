@@ -46,6 +46,6 @@ jobs:
           script: |
             cd /opt/apps/shorten_url
             git pull origin deploy
-            docker-compose down
-            docker-compose up -d --build
+            docker compose down
+            docker compose up -d --build
             docker system prune -f
