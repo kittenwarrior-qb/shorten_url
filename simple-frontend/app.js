@@ -149,7 +149,79 @@ function displayLinks(links) {
     `).join('');
 }
 
-// Show link detail with QR code
+// Display analytics
+function displayAnalytics(analytics) {
+    const analyticsEl = document.getElementById('analytics');
+    
+    if (!analytics || analytics.total_clicks === 0) {
+        analyticsEl.style.display = 'none';
+        return;
+    }
+    
+    let html = '<h4>Analytics</h4>';
+    html += `<div class="analytics-stat"><strong>Total Clicks:</strong> ${analytics.total_clicks}</div>`;
+    
+    // Countries
+    if (analytics.countries && Object.keys(analytics.countries).length > 0) {
+        html += '<div class="analytics-section"><strong>Countries:</strong><ul>';
+        Object.entries(analytics.countries)
+            .sort((a, b) => b[1] - a[1])
+            .forEach(([country, count]) => {
+                html += `<li>${country}: ${count}</li>`;
+            });
+        html += '</ul></div>';
+    }
+    
+    // Devices
+    if (analytics.devices && Object.keys(analytics.devices).length > 0) {
+        html += '<div class="analytics-section"><strong>Devices:</strong><ul>';
+        Object.entries(analytics.devices)
+            .sort((a, b) => b[1] - a[1])
+            .forEach(([device, count]) => {
+                html += `<li>${device}: ${count}</li>`;
+            });
+        html += '</ul></div>';
+    }
+    
+    // Browsers
+    if (analytics.browsers && Object.keys(analytics.browsers).length > 0) {
+        html += '<div class="analytics-section"><strong>Browsers:</strong><ul>';
+        Object.entries(analytics.browsers)
+            .sort((a, b) => b[1] - a[1])
+            .forEach(([browser, count]) => {
+                html += `<li>${browser}: ${count}</li>`;
+            });
+        html += '</ul></div>';
+    }
+    
+    // OS
+    if (analytics.os && Object.keys(analytics.os).length > 0) {
+        html += '<div class="analytics-section"><strong>Operating Systems:</strong><ul>';
+        Object.entries(analytics.os)
+            .sort((a, b) => b[1] - a[1])
+            .forEach(([os, count]) => {
+                html += `<li>${os}: ${count}</li>`;
+            });
+        html += '</ul></div>';
+    }
+    
+    // Referers
+    if (analytics.referers && Object.keys(analytics.referers).length > 0) {
+        html += '<div class="analytics-section"><strong>Referers:</strong><ul>';
+        Object.entries(analytics.referers)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5) // Top 5
+            .forEach(([referer, count]) => {
+                html += `<li>${referer || 'Direct'}: ${count}</li>`;
+            });
+        html += '</ul></div>';
+    }
+    
+    analyticsEl.innerHTML = html;
+    analyticsEl.style.display = 'block';
+}
+
+// Show link detail with QR code and analytics
 async function showLinkDetail(shortCode) {
     const token = getToken();
     if (!token) return;
@@ -163,6 +235,7 @@ async function showLinkDetail(shortCode) {
         
         const data = await response.json();
         const link = data.data.link;
+        const analytics = data.data.analytics;
         
         document.getElementById('shortUrl').value = link.short_url;
         
@@ -170,6 +243,9 @@ async function showLinkDetail(shortCode) {
         if (link.qr_code) {
             qrCodeEl.innerHTML = `<img src="${link.qr_code}" alt="QR Code">`;
         }
+        
+        // Display analytics
+        displayAnalytics(analytics);
         
         showElement('result');
         hideElement('error');
