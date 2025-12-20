@@ -23,6 +23,8 @@ Output: https://shorten.quocbui.dev/abc123
 - Rate limiting (100 req/60s)
 - JWT Authentication
 - Swagger API docs
+- Unit tests với coverage report
+- CI/CD pipeline với GitHub Actions
 
 ## Tech Stack
 
@@ -238,3 +240,4 @@ Facebook, Instagram và nhiều social platforms set `Referrer-Policy: no-referr
 ## Screenshots
 
 ![Links Code Response](assets/readme/links-code-response.png)
+![Links Code Response](assets/readme/github-action.png)
