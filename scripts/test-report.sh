@@ -23,8 +23,9 @@ TEST_OUTPUT=$(go test -v -cover ./tests/unit/... 2>&1)
 EXIT_CODE=$?
 
 # Count results - use awk to ensure we get a number
-PASSED=$(echo "$TEST_OUTPUT" | grep -c "^--- PASS:" 2>/dev/null)
-FAILED=$(echo "$TEST_OUTPUT" | grep -c "^--- FAIL:" 2>/dev/null)
+# Count both parent tests and sub-tests
+PASSED=$(echo "$TEST_OUTPUT" | grep "^--- PASS:" | wc -l 2>/dev/null)
+FAILED=$(echo "$TEST_OUTPUT" | grep "^--- FAIL:" | wc -l 2>/dev/null)
 
 # Ensure we have numbers
 PASSED=${PASSED:-0}
@@ -72,8 +73,8 @@ if [ -d "./tests/integration" ]; then
     INT_OUTPUT=$(go test -v -cover ./tests/integration/... 2>&1)
     INT_EXIT=$?
     
-    INT_PASSED=$(echo "$INT_OUTPUT" | grep -c "^--- PASS:" 2>/dev/null)
-    INT_FAILED=$(echo "$INT_OUTPUT" | grep -c "^--- FAIL:" 2>/dev/null)
+    INT_PASSED=$(echo "$INT_OUTPUT" | grep "^--- PASS:" | wc -l 2>/dev/null)
+    INT_FAILED=$(echo "$INT_OUTPUT" | grep "^--- FAIL:" | wc -l 2>/dev/null)
     
     INT_PASSED=${INT_PASSED:-0}
     INT_FAILED=${INT_FAILED:-0}
@@ -111,8 +112,8 @@ if [ -d "./tests/api" ]; then
     API_OUTPUT=$(go test -v -cover ./tests/api/... 2>&1)
     API_EXIT=$?
     
-    API_PASSED=$(echo "$API_OUTPUT" | grep -c "^--- PASS:" 2>/dev/null)
-    API_FAILED=$(echo "$API_OUTPUT" | grep -c "^--- FAIL:" 2>/dev/null)
+    API_PASSED=$(echo "$API_OUTPUT" | grep "^--- PASS:" | wc -l 2>/dev/null)
+    API_FAILED=$(echo "$API_OUTPUT" | grep "^--- FAIL:" | wc -l 2>/dev/null)
     
     API_PASSED=${API_PASSED:-0}
     API_FAILED=${API_FAILED:-0}

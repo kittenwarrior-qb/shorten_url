@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener - Simple & Fast</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>URL Shortener</h1>
+            <p>Shorten your URLs</p>
+        </header>
+
+        <main>
+            <!-- Shorten Form -->
+            <div class="card">
+                <h2>Shorten URL</h2>
+                <form id="shortenForm">
+                    <div class="form-group">
+                        <label for="url">Enter your URL</label>
+                        <input 
+                            type="url" 
+                            id="url" 
+                            placeholder="example: https://example.com/very/long/url" 
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="alias">Alias</label>
+                        <input 
+                            type="text" 
+                            id="alias" 
+                            placeholder="example: mylink"
+                            pattern="[a-zA-Z0-9_-]{3,20}"
+                            title="3-20 characters: letters, numbers, underscore, hyphen"
+                        >
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Shorten</span>
+                        <span class="btn-loading" style="display: none;">Loading...</span>
+                    </button>
+                </form>
+
+                <!-- Result -->
+                <div id="result" class="result" style="display: none;">
+                    <h3>Success</h3>
+                    <div class="result-content">
+                        <div class="short-url-container">
+                            <input type="text" id="shortUrl" readonly>
+                            <button onclick="copyToClipboard()" class="btn btn-copy">Copy</button>
+                        </div>
+                        <div class="qr-code" id="qrCode"></div>
+                        <div id="analytics" class="analytics" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Error -->
+                <div id="error" class="error" style="display: none;"></div>
+            </div>
+
+            <!-- My Links -->
+            <div class="card">
+                <h2>My Links</h2>
+                <div id="linksList">
+                    <p class="empty-state">No links yet. Create your first shortened URL above!</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p><a href="https://shorten.quocbui.dev/swagger/index.html" target="_blank">API Documentation</a></p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
