@@ -11,4 +11,5 @@ var (
 	ErrAliasAlreadyExists = errors.New("alias already exists")
 	ErrUnauthorized       = errors.New("unauthorized")
 	ErrLinkExpired        = errors.New("link has expired")
+	ErrInvalidToken       = errors.New("invalid token")
 )

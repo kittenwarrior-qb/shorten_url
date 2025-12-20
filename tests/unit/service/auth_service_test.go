@@ -10,7 +10,7 @@ import (
 
 func TestAuthService_Register_Success(t *testing.T) {
 	mockRepo := mocks.NewMockUserRepository()
-	authService := service.NewAuthService(mockRepo)
+	authService := service.NewAuthService(mockRepo, "test-secret", 24)
 
 	user, err := authService.Register("test@example.com", "password123", "Test User")
 	if err != nil {
@@ -40,7 +40,7 @@ func TestAuthService_Register_Success(t *testing.T) {
 
 func TestAuthService_Register_EmailAlreadyExists(t *testing.T) {
 	mockRepo := mocks.NewMockUserRepository()
-	authService := service.NewAuthService(mockRepo)
+	authService := service.NewAuthService(mockRepo, "test-secret", 24)
 
 	_, err := authService.Register("test@example.com", "password123", "Test User")
 	if err != nil {
@@ -55,7 +55,7 @@ func TestAuthService_Register_EmailAlreadyExists(t *testing.T) {
 
 func TestAuthService_Login_Success(t *testing.T) {
 	mockRepo := mocks.NewMockUserRepository()
-	authService := service.NewAuthService(mockRepo)
+	authService := service.NewAuthService(mockRepo, "test-secret", 24)
 
 	_, err := authService.Register("test@example.com", "password123", "Test User")
 	if err != nil {
@@ -78,7 +78,7 @@ func TestAuthService_Login_Success(t *testing.T) {
 
 func TestAuthService_Login_InvalidEmail(t *testing.T) {
 	mockRepo := mocks.NewMockUserRepository()
-	authService := service.NewAuthService(mockRepo)
+	authService := service.NewAuthService(mockRepo, "test-secret", 24)
 
 	_, err := authService.Login("nonexistent@example.com", "password123")
 	if err == nil {
@@ -88,7 +88,7 @@ func TestAuthService_Login_InvalidEmail(t *testing.T) {
 
 func TestAuthService_Login_InvalidPassword(t *testing.T) {
 	mockRepo := mocks.NewMockUserRepository()
-	authService := service.NewAuthService(mockRepo)
+	authService := service.NewAuthService(mockRepo, "test-secret", 24)
 
 	_, err := authService.Register("test@example.com", "password123", "Test User")
 	if err != nil {
@@ -103,7 +103,7 @@ func TestAuthService_Login_InvalidPassword(t *testing.T) {
 
 func TestAuthService_Register_AssignsUserID(t *testing.T) {
 	mockRepo := mocks.NewMockUserRepository()
-	authService := service.NewAuthService(mockRepo)
+	authService := service.NewAuthService(mockRepo, "test-secret", 24)
 
 	user, err := authService.Register("test@example.com", "password123", "Test User")
 	if err != nil {

@@ -19,19 +19,27 @@ type ClickInfo struct {
 
 // LinkService handles link-related business logic
 type LinkService struct {
-	linkRepo  repository.LinkRepository
-	clickRepo repository.ClickRepository
-	txManager repository.TransactionManager
-	geoIP     *GeoIPService
+	linkRepo    repository.LinkRepository
+	clickRepo   repository.ClickRepository
+	txManager   repository.TransactionManager
+	geoIP       *GeoIPService
+	authService *AuthService
 }
 
 // NewLinkService creates a new link service
-func NewLinkService(linkRepo repository.LinkRepository, clickRepo repository.ClickRepository, txManager repository.TransactionManager, geoIP *GeoIPService) *LinkService {
+func NewLinkService(
+	linkRepo repository.LinkRepository,
+	clickRepo repository.ClickRepository,
+	txManager repository.TransactionManager,
+	geoIP *GeoIPService,
+	authService *AuthService,
+) *LinkService {
 	return &LinkService{
-		linkRepo:  linkRepo,
-		clickRepo: clickRepo,
-		txManager: txManager,
-		geoIP:     geoIP,
+		linkRepo:    linkRepo,
+		clickRepo:   clickRepo,
+		txManager:   txManager,
+		geoIP:       geoIP,
+		authService: authService,
 	}
 }
 
@@ -192,4 +200,38 @@ func (s *LinkService) DeleteLink(shortCode string, userID uint) error {
 	}
 
 	return s.linkRepo.Delete(link.ID)
+}
+
+// CreateLinkWithAuth creates a link with authentication handling
+// If authHeader is provided and valid, link belongs to that user
+// Otherwise creates a guest user and returns token
+func (s *LinkService) CreateLinkWithAuth(
+	originalURL string,
+	customAlias *string,
+	expiresAt *time.Time,
+	authHeader string,
+	shortCodeLength int,
+) (*models.Link, string, error) {
+	// Try to get user from token
+	userID, err := s.authService.GetUserFromToken(authHeader)
+
+	var token string
+
+	// If no valid token, create guest user
+	if err != nil || userID == nil {
+		guestUser, guestToken, err := s.authService.CreateGuestUser()
+		if err != nil {
+			return nil, "", err
+		}
+		userID = &guestUser.ID
+		token = guestToken
+	}
+
+	// Create link
+	link, err := s.CreateLink(originalURL, customAlias, userID, expiresAt, shortCodeLength)
+	if err != nil {
+		return nil, "", err
+	}
+
+	return link, token, nil
 }

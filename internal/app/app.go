@@ -38,6 +38,7 @@ type App struct {
 	LinkService      *service.LinkService
 	AnalyticsService *service.AnalyticsService
 	GeoIPService     *service.GeoIPService
+	QRService        *service.QRService
 
 	AuthHandler *handlers.AuthHandler
 	UserHandler *handlers.UserHandler
@@ -78,18 +79,21 @@ func (a *App) initRepositories() {
 
 func (a *App) initServices() {
 	a.GeoIPService = service.NewGeoIPService()
-	a.AuthService = service.NewAuthService(a.UserRepo)
-	a.LinkService = service.NewLinkService(a.LinkRepo, a.ClickRepo, a.TxManager, a.GeoIPService)
+	a.QRService = service.NewQRService("assets/logo.png")
+	a.AuthService = service.NewAuthService(a.UserRepo, a.Config.JWT.Secret, a.Config.JWT.ExpiryHours)
+	a.LinkService = service.NewLinkService(a.LinkRepo, a.ClickRepo, a.TxManager, a.GeoIPService, a.AuthService)
 	a.AnalyticsService = service.NewAnalyticsService(a.ClickRepo, a.LinkRepo)
 }
 
 func (a *App) initHandlers() {
-	a.AuthHandler = handlers.NewAuthHandler(a.AuthService, a.Config.JWT.Secret, a.Config.JWT.ExpiryHours)
+	a.AuthHandler = handlers.NewAuthHandler(a.AuthService)
 	a.UserHandler = handlers.NewUserHandler(a.UserRepo)
 	a.LinkHandler = handlers.NewLinkHandler(
-		a.LinkService, a.AnalyticsService, a.AuthService,
-		a.Config.App.Domain, a.Config.ShortCode.Length,
-		a.Config.JWT.Secret, a.Config.JWT.ExpiryHours,
+		a.LinkService,
+		a.AnalyticsService,
+		a.QRService,
+		a.Config.App.Domain,
+		a.Config.ShortCode.Length,
 	)
 }
 

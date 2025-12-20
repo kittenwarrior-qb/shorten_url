@@ -7,20 +7,15 @@ import (
 	"github.com/gin-gonic/gin"
 	"quocbui.dev/m/internal/dto"
 	"quocbui.dev/m/internal/service"
-	"quocbui.dev/m/pkg/utils"
 )
 
 type AuthHandler struct {
 	authService *service.AuthService
-	jwtSecret   string
-	jwtExpiry   int
 }
 
-func NewAuthHandler(authService *service.AuthService, jwtSecret string, jwtExpiry int) *AuthHandler {
+func NewAuthHandler(authService *service.AuthService) *AuthHandler {
 	return &AuthHandler{
 		authService: authService,
-		jwtSecret:   jwtSecret,
-		jwtExpiry:   jwtExpiry,
 	}
 }
 
@@ -78,21 +73,15 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	user, err := h.authService.Login(req.Email, req.Password)
+	user, token, err := h.authService.LoginWithToken(req.Email, req.Password)
 	if err != nil {
 		dto.Error(c, http.StatusUnauthorized, dto.ErrCodeInvalidCredentials, "invalid credentials")
 		return
 	}
 
-	token, err := utils.GenerateToken(user.ID, user.Email, h.jwtSecret, h.jwtExpiry)
-	if err != nil {
-		dto.InternalServerError(c, "failed to generate token")
-		return
-	}
-
 	dto.Success(c, http.StatusOK, dto.LoginResponse{
 		Token:     token,
-		ExpiresAt: time.Now().Add(time.Duration(h.jwtExpiry) * time.Hour),
+		ExpiresAt: time.Now().Add(24 * time.Hour), // Should get from config
 		User: dto.UserResponse{
 			ID:        user.ID,
 			Email:     user.Email,

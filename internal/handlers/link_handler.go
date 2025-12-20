@@ -1,11 +1,9 @@
 package handlers
 
 import (
-	"encoding/base64"
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -13,36 +11,29 @@ import (
 	"quocbui.dev/m/internal/middleware"
 	"quocbui.dev/m/internal/models"
 	"quocbui.dev/m/internal/service"
-	"quocbui.dev/m/pkg/utils"
 )
 
 type LinkHandler struct {
 	linkService      *service.LinkService
 	analyticsService *service.AnalyticsService
-	authService      *service.AuthService
+	qrService        *service.QRService
 	domain           string
 	shortCodeLength  int
-	jwtSecret        string
-	jwtExpiry        int
 }
 
 func NewLinkHandler(
 	linkService *service.LinkService,
 	analyticsService *service.AnalyticsService,
-	authService *service.AuthService,
+	qrService *service.QRService,
 	domain string,
 	shortCodeLength int,
-	jwtSecret string,
-	jwtExpiry int,
 ) *LinkHandler {
 	return &LinkHandler{
 		linkService:      linkService,
 		analyticsService: analyticsService,
-		authService:      authService,
+		qrService:        qrService,
 		domain:           domain,
 		shortCodeLength:  shortCodeLength,
-		jwtSecret:        jwtSecret,
-		jwtExpiry:        jwtExpiry,
 	}
 }
 
@@ -71,36 +62,17 @@ func (h *LinkHandler) Shorten(c *gin.Context) {
 		expiresAt = &t
 	}
 
-	var userID *uint
-	var token string
-
-	// Check if user is authenticated
+	// Get authorization header
 	authHeader := c.GetHeader("Authorization")
-	if authHeader != "" {
-		tokenString := authHeader
-		if strings.HasPrefix(authHeader, "Bearer ") {
-			tokenString = strings.TrimPrefix(authHeader, "Bearer ")
-		}
-		claims, err := utils.ValidateToken(tokenString, h.jwtSecret)
-		if err == nil {
-			userID = &claims.UserID
-		}
-	}
 
-	// If no valid token, create guest user
-	if userID == nil {
-		guestEmail := fmt.Sprintf("guest_%d@temp.local", time.Now().UnixNano())
-		guestPass := fmt.Sprintf("guest_%d", time.Now().UnixNano())
-		guestUser, err := h.authService.Register(guestEmail, guestPass, "Guest")
-		if err != nil {
-			dto.InternalServerError(c, "failed to create guest account")
-			return
-		}
-		userID = &guestUser.ID
-		token, _ = utils.GenerateToken(guestUser.ID, guestUser.Email, h.jwtSecret, h.jwtExpiry)
-	}
-
-	link, err := h.linkService.CreateLink(req.URL, req.Alias, userID, expiresAt, h.shortCodeLength)
+	// Service handles authentication and guest user creation
+	link, token, err := h.linkService.CreateLinkWithAuth(
+		req.URL,
+		req.Alias,
+		expiresAt,
+		authHeader,
+		h.shortCodeLength,
+	)
 	if err != nil {
 		h.handleLinkError(c, err)
 		return
@@ -263,12 +235,8 @@ func (h *LinkHandler) DeleteMyLink(c *gin.Context) {
 func (h *LinkHandler) toLinkResponse(link *models.Link) dto.LinkResponse {
 	shortURL := fmt.Sprintf("https://%s/%s", h.domain, link.ShortCode)
 
-	// Generate QR code
-	qrCode := ""
-	qrBytes, err := utils.GenerateQRCode(shortURL, "assets/logo.png")
-	if err == nil {
-		qrCode = "data:image/png;base64," + base64.StdEncoding.EncodeToString(qrBytes)
-	}
+	// Generate QR code using QR service
+	qrCode, _ := h.qrService.GenerateQRCodeBase64(shortURL)
 
 	return dto.LinkResponse{
 		ID:          link.ID,
