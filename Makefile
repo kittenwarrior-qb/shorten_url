@@ -8,9 +8,18 @@ run:
 build:
 	go build -o bin/app cmd/main.go
 
-# Run tests
+# Run tests (basic)
 test:
 	go test -v -cover ./tests/...
+
+# Run tests with pretty output 
+test-pretty:
+	@which gotestsum > /dev/null || go install gotest.tools/gotestsum@latest
+	gotestsum --format testdox -- -cover ./tests/...
+
+# Run tests with summary report
+test-report:
+	powershell -ExecutionPolicy Bypass -File scripts/test-report.ps1
 
 # Tidy dependencies
 tidy:

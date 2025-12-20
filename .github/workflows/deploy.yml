@@ -1,13 +1,17 @@
-name: Deploy to VPS
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - deploy  # Chỉ trigger khi push vào nhánh deploy
+      - deploy
+  pull_request:
+    branches:
+      - main
+      - deploy
 
 jobs:
   test:
-    name: Run Tests
+    name: 🧪 Run Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,13 +22,19 @@ jobs:
         with:
           go-version: '1.24'
 
-      - name: Run tests
-        run: go test -v ./tests/...
+      - name: Install gotestsum
+        run: go install gotest.tools/gotestsum@latest
+
+      - name: Run tests with summary
+        run: |
+          chmod +x scripts/test-report.sh
+          ./scripts/test-report.sh
 
   deploy:
-    name: Deploy to VPS
+    name: 🚀 Deploy to VPS
     runs-on: ubuntu-latest
-    needs: test  # Chỉ deploy nếu tests pass
+    needs: test
+    if: github.ref == 'refs/heads/deploy' && github.event_name == 'push'
     steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
