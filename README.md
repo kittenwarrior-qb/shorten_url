@@ -62,6 +62,19 @@ make tidy      # go mod tidy
 make fmt       # Format code
 ```
 
+### Chạy Tests
+```bash
+# Chạy tất cả tests
+go test ./tests/...
+
+# Chạy tests cụ thể
+go test -v ./tests/unit/service/...
+go test -v ./tests/unit/utils/...
+
+# Xem coverage
+go test -cover ./tests/...
+```
+
 ## API Endpoints
 
 | Method | Endpoint | Mô tả |
@@ -216,7 +229,7 @@ Facebook, Instagram và nhiều social platforms set `Referrer-Policy: no-referr
 
 ### Production-ready cần thêm
 - Distributed rate limiting scale lên Redis
-- Unit tests, Integration tests và CI/CD actions
+- Integration tests và CI/CD actions
 - Metrics & monitoring 
 - Structured logging 
 - Database backup 

@@ -10,7 +10,7 @@ build:
 
 # Run tests
 test:
-	go test -v -cover ./...
+	go test -v -cover ./tests/...
 
 # Tidy dependencies
 tidy:
