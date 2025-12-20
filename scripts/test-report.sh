@@ -39,8 +39,9 @@ run_test_category() {
         return
     fi
     
-    # Run tests
-    gotestsum --format dots-v2 --jsonfile "$json_file" -- -cover "$path" > /dev/null 2>&1
+    # Run tests and capture output
+    local output_file="$TEMP_DIR/$category-output.txt"
+    gotestsum --format dots-v2 --jsonfile "$json_file" -- -cover "$path" > "$output_file" 2>&1
     local exit_code=$?
     
     local end_time=$(date +%s)
@@ -48,13 +49,22 @@ run_test_category() {
     
     # Parse results
     if [ -f "$json_file" ]; then
-        local passed=$(grep -c '"Action":"pass".*"Test":' "$json_file" 2>/dev/null || echo 0)
-        local failed=$(grep -c '"Action":"fail".*"Test":' "$json_file" 2>/dev/null || echo 0)
-        local skipped=$(grep -c '"Action":"skip".*"Test":' "$json_file" 2>/dev/null || echo 0)
+        local passed=$(grep '"Action":"pass"' "$json_file" | grep '"Test":' | wc -l | tr -d ' ')
+        local failed=$(grep '"Action":"fail"' "$json_file" | grep '"Test":' | wc -l | tr -d ' ')
+        local skipped=$(grep '"Action":"skip"' "$json_file" | grep '"Test":' | wc -l | tr -d ' ')
+        
+        # Default to 0 if empty
+        passed=${passed:-0}
+        failed=${failed:-0}
+        skipped=${skipped:-0}
+        
         local total=$((passed + failed + skipped))
         
-        # Extract coverage
-        local coverage=$(grep -o 'coverage: [0-9.]*%' "$json_file" | tail -1 | grep -o '[0-9.]*' || echo "N/A")
+        # Extract coverage from output
+        local coverage="N/A"
+        if [ -f "$output_file" ]; then
+            coverage=$(grep -o 'coverage: [0-9.]*%' "$output_file" | tail -1 | grep -o '[0-9.]*' || echo "N/A")
+        fi
         
         echo "$passed|$failed|$skipped|$total|$duration|$coverage|$exit_code"
     else
@@ -71,6 +81,25 @@ api_result=$(run_test_category "API" "./tests/api/..." "\033[0;35m")
 IFS='|' read -r unit_passed unit_failed unit_skipped unit_total unit_duration unit_coverage unit_exit <<< "$unit_result"
 IFS='|' read -r int_passed int_failed int_skipped int_total int_duration int_coverage int_exit <<< "$integration_result"
 IFS='|' read -r api_passed api_failed api_skipped api_total api_duration api_coverage api_exit <<< "$api_result"
+
+# Default to 0 if empty
+unit_passed=${unit_passed:-0}
+unit_failed=${unit_failed:-0}
+unit_skipped=${unit_skipped:-0}
+unit_total=${unit_total:-0}
+unit_duration=${unit_duration:-0}
+
+int_passed=${int_passed:-0}
+int_failed=${int_failed:-0}
+int_skipped=${int_skipped:-0}
+int_total=${int_total:-0}
+int_duration=${int_duration:-0}
+
+api_passed=${api_passed:-0}
+api_failed=${api_failed:-0}
+api_skipped=${api_skipped:-0}
+api_total=${api_total:-0}
+api_duration=${api_duration:-0}
 
 # Calculate totals
 total_passed=$((unit_passed + int_passed + api_passed))
@@ -98,6 +127,12 @@ print_category() {
     local total=$5
     local duration=$6
     local coverage=$7
+    
+    # Convert to numbers
+    passed=${passed:-0}
+    failed=${failed:-0}
+    skipped=${skipped:-0}
+    total=${total:-0}
     
     if [ "$total" -gt 0 ]; then
         local status_color=$GREEN
