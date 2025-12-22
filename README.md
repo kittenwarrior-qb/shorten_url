@@ -46,8 +46,9 @@ Output: https://shorten.quocbui.dev/abc123
 git clone https://github.com/quocbui2020/shorten_url.git
 cd shorten_url
 cp .env.example .env
-# Sửa .env credentials 
-make run
+
+# Chạy server
+go run cmd/main.go
 # → http://localhost:8080/swagger/index.html
 ```
 
@@ -57,27 +58,16 @@ cp .env.example .env
 docker-compose up -d --build
 ```
 
-### Make Commands
+### Make Commands (Optional)
+Nếu bạn có `make` installed, có thể dùng các shortcuts:
 ```bash
 make run       # Chạy dev server
 make build     # Build binary ra bin/app
 make test      # Chạy tests với coverage
+make test-report   # Chạy tests với summary
 make swagger   # Generate Swagger docs
 make tidy      # go mod tidy
 make fmt       # Format code
-```
-
-### Chạy Tests
-```bash
-# Chạy tất cả tests
-go test ./tests/...
-
-# Chạy tests cụ thể
-go test -v ./tests/unit/service/...
-go test -v ./tests/unit/utils/...
-
-# Xem coverage
-go test -cover ./tests/...
 ```
 
 ## API Endpoints
