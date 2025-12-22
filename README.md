@@ -185,6 +185,24 @@ Ban đầu query riêng từng loại (browser, OS, device...) → nhiều round
 
 Fix: Gom lại thành batch queries với GROUP BY, 1 query lấy hết.
 
+### SSH Brute Force & Crypto Miner Attack
+VPS bị bots tự động scan và brute force SSH liên tục từ nhiều quốc gia:
+- `176.117.107.232` - Russia
+- `175.29.196.229` - Bangladesh
+- `171.244.60.34` - Vietnam
+- `91.202.233.33` - Ukraine
+
+Hậu quả: Bị cài crypto miner (`/tmp/.ICEi-unix/rediserver`) ngốn 40% CPU, làm PostgreSQL connection bị drop.
+
+Fix:
+- Kill malware process và xóa file
+- Install `fail2ban` để auto-ban IP sau vài lần login fail
+- Đổi SSH port
+- Sử dụng strong password
+- Không expose database port ra public (dùng ssh thay thế)
+![Links Code Response](assets/readme/hacker.png)
+
+
 ## Security
 
 - Người dùng không get được links của người khác (jwt)
